@@ -4,7 +4,7 @@ const bool_a = true
 const bool_b : bool = false
 
 const num_a = 1
-const num_b = 1.2
+const num_b = 0.1
 const num_c : i32 = 2
 
 const str_a = "hello"
@@ -13,13 +13,13 @@ const str_b : String = "one\"\\two"
 ==>
 
 Program(
-  Item(Const_Decl(const,Identifier,"=",Constant(Boolean))),
-  Item(Const_Decl(const,Identifier,":",Type,"=",Constant(Boolean))),
-  Item(Const_Decl(const,Identifier,"=",Constant(Number))),
-  Item(Const_Decl(const,Identifier,"=",Constant(Number))),
-  Item(Const_Decl(const,Identifier,":",Type,"=",Constant(Number))),
-  Item(Const_Decl(const,Identifier,"=",Constant(String))),
-  Item(Const_Decl(const,Identifier,":",Type,"=",Constant(String)))
+  Item(Const_Decl(Keyword(const),Identifier,Constant(Boolean))),
+  Item(Const_Decl(Keyword(const),Identifier,Type,Constant(Boolean))),
+  Item(Const_Decl(Keyword(const),Identifier,Constant(Number))),
+  Item(Const_Decl(Keyword(const),Identifier,Constant(Number))),
+  Item(Const_Decl(Keyword(const),Identifier,Type,Constant(Number))),
+  Item(Const_Decl(Keyword(const),Identifier,Constant(String))),
+  Item(Const_Decl(Keyword(const),Identifier,Type,Constant(String)))
 )
 
 # Type Declarations
@@ -32,8 +32,50 @@ type parent(a: String, b: String)
 ==>
 
 Program(
-  Item(Type_Decl(type,Identifier,"=",Type)),
-  Item(Type_Decl(type,Identifier,"<:",Type)),
-  Item(Type_Decl(type,Identifier,"(",Type,Type,")")),
-  Item(Type_Decl(type,Identifier,"(",Identifier,":",Type,Identifier,":",Type,")"))
+  Item(Type_Decl(Keyword(type),Identifier,Type)),
+  Item(Type_Decl(Keyword(type),Identifier,Type)),
+  Item(Type_Decl(Keyword(type),Identifier,"(",Type,Type,")")),
+  Item(Type_Decl(Keyword(type),Identifier,"(",Identifier,Type,Identifier,Type,")"))
 )
+
+# Fact Declarations
+
+rel empty = {}
+rel digit = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}
+rel object_color = {
+  0.98::(0, "red"), 0.01::(0, "green"), 0.01::(0, "blue"),
+  0.01::(1, "red"), 0.98::(1, "green"), 0.01::(1, "blue"),
+  0.02::(2, "red"), 0.97::(2, "green"), 0.01::(2, "blue"),
+}
+rel bool_tag = { true::(3.5,); false::(4.5) }
+
+==>
+
+Program(
+  Item(Relation_Decl(Facts_Set_Decl(Keyword(rel),Identifier,"{","}"))),
+  Item(Relation_Decl(Facts_Set_Decl(Keyword(rel),Identifier,"{",Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),"}"))),
+  Item(Relation_Decl(Facts_Set_Decl(Keyword(rel),Identifier,"{",Tag(Number),Const_Tuple("(",Constant(Number),Constant(String),")"),Tag(Number),Const_Tuple("(",Constant(Number),Constant(String),")"),Tag(Number),Const_Tuple("(",Constant(Number),Constant(String),")"),Tag(Number),Const_Tuple("(",Constant(Number),Constant(String),")"),Tag(Number),Const_Tuple("(",Constant(Number),Constant(String),")"),Tag(Number),Const_Tuple("(",Constant(Number),Constant(String),")"),Tag(Number),Const_Tuple("(",Constant(Number),Constant(String),")"),Tag(Number),Const_Tuple("(",Constant(Number),Constant(String),")"),Tag(Number),Const_Tuple("(",Constant(Number),Constant(String),")"),"}"))),
+  Item(Relation_Decl(Facts_Set_Decl(Keyword(rel),Identifier,"{",Tag(Boolean),Const_Tuple("(",Constant(Number),")"),Tag(Boolean),Const_Tuple("(",Constant(Number),")"),"}")))
+)
+
+# Rule Declarations
+
+rel grandparent(a, b) = parent(a, b), parent(b, c)
+rel sum(a + b) = digit1(a), digit2(b)
+rel 1.0::eq(a == b) :- bool1(a), bool2(b)
+
+==>
+
+Program(
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,"(",Expr(Identifier),Expr(Identifier),")"),Formula(Formula(Atom(Identifier,"(",Expr(Identifier),Expr(Identifier),")")),Formula_Op,Formula(Atom(Identifier,"(",Expr(Identifier),Expr(Identifier),")")))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,"(",Expr(Expr(Identifier),Bin_Op,Expr(Identifier)),")"),Formula(Formula(Atom(Identifier,"(",Expr(Identifier),")")),Formula_Op,Formula(Atom(Identifier,"(",Expr(Identifier),")")))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Tag(Number),Atom(Identifier,"(",Expr(Expr(Identifier),Bin_Op,Expr(Identifier)),")"),Formula(Formula(Atom(Identifier,"(",Expr(Identifier),")")),Formula_Op,Formula(Atom(Identifier,"(",Expr(Identifier),")"))))))
+)
+
+# Query Declarations
+
+query your_mom
+
+==>
+
+Program(Item(Query_Decl(Keyword(query),Identifier)))
