@@ -1,26 +1,150 @@
-@top Program { expression* }
+@top Program { Item* }
+
+@precedence { op @left }
 
 @skip { space | LineComment }
 
-expression {
-  Identifier |
-  String |
-  Boolean |
-  Application { "(" expression* ")" }
+commaSep<content> {
+  (content ("," content)*)?
 }
+
+semiSep<content> {
+  (content (";" content)*)?
+}
+
+commaSep1<content> {
+  content ("," content)*
+}
+
+Item {
+  Type_Decl |
+  Relation_Decl |
+  Const_Decl |
+  Query_Decl
+}
+
+Type_Decl {
+  kw<"type"> Identifier "=" Type |
+  kw<"type"> Identifier "<:" Type |
+  kw<"type"> Identifier "(" commaSep1<Type> ")" |
+  kw<"type"> Identifier "(" commaSep1<Identifier ":" Type> ")" |
+  kw<"type"> "$" Identifier "(" commaSep<Identifier ":" Type> ")" ("->" Type)?
+}
+
+Relation_Decl {
+  Fact_Decl | Facts_Set_Decl | Rule_Decl
+}
+
+Fact_Decl {
+  kw<"rel"> Identifier "(" Const_Expr ")" |
+  kw<"rel"> Tag "::" Identifier "(" Const_Expr ")"
+}
+
+Facts_Set_Decl {
+  kw<"rel"> Identifier "=" "{" commaSep<Const_Tuple> "}" |
+  kw<"re"> Identifier "=" "{" commaSep<Tag "::" Const_Tuple> ~ambigFacts "}" |
+  kw<"re"> Identifier "=" "{" semiSep<Tag "::" Const_Tuple> ~ambigFacts "}"
+}
+
+Const_Decl {
+  kw<"const"> Identifier (":" Type)? "=" Constant
+}
+
+Constant {
+  Boolean | Number | String
+}
+
+Const_Tuple {
+  Constant | "(" commaSep<Constant> ")"
+}
+
+Const_Expr {
+  Constant ~constant |
+  Const_Expr !op Bin_Op Const_Expr | Unary_Op Const_Expr |
+  "$" Identifier "(" commaSep<Const_Expr> ~ambigParams ")" |
+  kw<"if"> Const_Expr kw<"then"> Const_Expr kw<"else"> Const_Expr |
+  "(" Const_Expr ")"
+}
+
+Expr[@dynamicPrecedence=1] {
+  Identifier |
+  Constant ~constant |
+  Expr !op Bin_Op Expr | Unary_Op Expr |
+  "$" Identifier "(" commaSep<Expr> ~ambigParams ")" |
+  kw<"if"> Expr kw<"then"> Expr kw<"else"> Expr |
+  "(" Expr ")"
+}
+
+Atom {
+  Identifier "(" commaSep<Expr> ")"
+}
+
+Formula {
+  Atom | "~" Atom | Phrase_Op<"not"> Atom |
+  Formula !op Formula_Op Formula |
+  Formula !op Phrase_Op<"and"> Formula |
+  Formula !op Phrase_Op<"or"> Formula |
+  Formula !op Phrase_Op<"implies"> Formula |
+  "(" Formula ")"
+}
+
+Rule_Decl {
+  kw<"rel"> Atom ":-" Formula | kw<"rel"> Atom "=" Formula |
+  kw<"rel"> Tag "::" Atom ":-" Formula | kw<"rel"> Tag "::" Atom "=" Formula
+}
+
+Query_Decl {
+  kw<"query"> Identifier | kw<"query"> Atom
+}
+
+Tag {
+  Boolean | Number
+}
+
+Boolean { @specialize<Identifier, "true" | "false"> }
+
+Type { @specialize<Identifier, 
+  "u8" | "u16" | "u32" | "u64" | "u128" | "usize" |
+  "i8" | "i16" | "i32" | "i64" | "i128" | "isize" |
+  "f32" | "f64" | "char" | "bool" | "String"> }
+
+Phrase_Op<op> { @specialize<Identifier, op> }
+
+kw<term> { @specialize[@name={term}]<Identifier, term> }
 
 @tokens {
   Identifier { $[a-zA-Z_\-0-9]+ }
 
+  Unary_Op { "!" | "-" }
+
+  Bin_Op {
+    "+" | "-" | "*" | "/" | "%" | "==" | "!=" | "<=" | "<" | ">=" | ">" | "&&" | "||" | "^"
+  }
+
+  Formula_Op {
+    "," | "/\\" | "\\/" | "=>"
+  }
+
+  Number { (@digit ("_" | @digit)* ("." ("_" | @digit)*)? | "." @digit ("_" | @digit)*) }
+
   String { '"' (!["\\] | "\\" _)* '"' }
 
-  Boolean { "#t" | "#f" }
+  LineComment { "//" ![\n]* }
 
-  LineComment { ";" ![\n]* }
+  space { @whitespace+ }
 
-  space { $[ \t\n\r]+ }
+  "(" ")" "=" ":" ":-" "::" "->" "<:" "$"
 
-  "(" ")"
+  @precedence {
+    LineComment,
+    String,
+    Number,
+    "(", ")", "=", ":", ":-", "::", "->", "<:", "$",
+    Bin_Op,
+    Unary_Op,
+    Formula_Op,
+    Identifier
+  }
 }
 
 @detectDelim

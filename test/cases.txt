@@ -1,41 +1,39 @@
-# Booleans
+# Constant Declarations
 
-#t
-#f
+const bool_a = true
+const bool_b : bool = false
 
-==>
+const num_a = 1
+const num_b = 1.2
+const num_c : i32 = 2
 
-Program(Boolean, Boolean)
-
-# Identifiers
-
-one
-Two_Three
+const str_a = "hello"
+const str_b : String = "one\"\\two"
 
 ==>
 
-Program(Identifier, Identifier)
+Program(
+  Item(Const_Decl(const,Identifier,"=",Constant(Boolean))),
+  Item(Const_Decl(const,Identifier,":",Type,"=",Constant(Boolean))),
+  Item(Const_Decl(const,Identifier,"=",Constant(Number))),
+  Item(Const_Decl(const,Identifier,"=",Constant(Number))),
+  Item(Const_Decl(const,Identifier,":",Type,"=",Constant(Number))),
+  Item(Const_Decl(const,Identifier,"=",Constant(String))),
+  Item(Const_Decl(const,Identifier,":",Type,"=",Constant(String)))
+)
 
-# Strings
+# Type Declarations
 
-"hello"
-"one\"\\two"
+type a = i32
+type b <: bool
+type parent(String, String)
+type parent(a: String, b: String)
 
 ==>
 
-Program(String, String)
-
-# Applications
-
-(begin
-  (when #t
-    (print (concat "hello" " " "world")))
-  (print "DONE"))
-
-==>
-
-Program(Application(
-  Identifier,
-  Application(Identifier, Boolean, Application(
-    Identifier, Application(Identifier, String, String, String)))
-  Application(Identifier, String)))
+Program(
+  Item(Type_Decl(type,Identifier,"=",Type)),
+  Item(Type_Decl(type,Identifier,"<:",Type)),
+  Item(Type_Decl(type,Identifier,"(",Type,Type,")")),
+  Item(Type_Decl(type,Identifier,"(",Identifier,":",Type,Identifier,":",Type,")"))
+)
