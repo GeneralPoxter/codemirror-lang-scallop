@@ -25,8 +25,6 @@ export const ScallopLanguage = LRLanguage.define({
         ArithOp: t.arithmeticOperator,
         LogicOp: t.logicOperator,
         CompareOp: t.compareOperator,
-        "( )": t.paren,
-        "{ }": t.brace,
       }),
     ],
   }),
