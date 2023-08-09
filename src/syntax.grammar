@@ -62,7 +62,7 @@ Const_Tuple {
 
 Const_Expr[@dynamicPrecedence=1] {
   Constant ~constant |
-  Const_Expr !op (Bin_Op | CompareOp) Const_Expr | Unary_Op Const_Expr |
+  Const_Expr !op bin_op Const_Expr | unary_op Const_Expr |
   "$" Identifier Param_List<Const_Expr> |
   Keyword<"if"> Const_Expr Keyword<"then"> Const_Expr Keyword<"else"> Const_Expr |
   "(" Const_Expr ")"
@@ -71,7 +71,7 @@ Const_Expr[@dynamicPrecedence=1] {
 Expr {
   Identifier |
   Constant ~constant |
-  Expr !op (Bin_Op | CompareOp) Expr | Unary_Op Expr |
+  Expr !op bin_op Expr | unary_op Expr |
   "$" Identifier Param_List<Expr> |
   Keyword<"if"> Expr Keyword<"then"> Expr Keyword<"else"> Expr |
   "(" Expr ")"
@@ -84,7 +84,7 @@ Atom {
 Param_List<expr> { "(" commaSep<expr> ~ambigParams ")" }
 
 Formula {
-  Atom | "~" Atom | LogicOp<"not"> Atom |
+  Atom | "~" Atom | WordOp<"not"> Atom |
   Formula !op formula_op Formula |
   "(" Formula ")"
 }
@@ -108,17 +108,19 @@ Tagged<expr> {
 
 Boolean { @specialize<Identifier, "true" | "false"> }
 
-Unary_Op { ArithOp<"-"> | LogicOp<"!"> | LogicOp<"not"> }
+unary_op { ArithOp<"-"> | LogicOp<"!"> | WordOp<"not"> }
 
-Bin_Op {
+bin_op {
   ArithOp<"+"> | ArithOp<"-"> | ArithOp<"*"> | ArithOp<"/"> | ArithOp<"%"> | ArithOp<"^"> |
-  LogicOp<"&&"> | LogicOp<"||"> | LogicOp<"and"> | LogicOp<"or"> | LogicOp<"implies">
+  LogicOp<"&&"> | LogicOp<"||"> | WordOp<"and"> | WordOp<"or"> | WordOp<"implies"> | CompareOp
 }
 
 formula_op {
   LogicOp<","> | LogicOp<"/\\"> | LogicOp<"\\/"> | LogicOp<"=>"> |
-  LogicOp<"and"> | LogicOp<"or"> | LogicOp<"implies">
+  WordOp<"and"> | WordOp<"or"> | WordOp<"implies">
 }
+
+WordOp<term> { @specialize<Identifier, term> }
 
 Type { @specialize<Identifier, 
   "u8" | "u16" | "u32" | "u64" | "u128" | "usize" |

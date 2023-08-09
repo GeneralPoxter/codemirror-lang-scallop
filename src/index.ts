@@ -1,12 +1,5 @@
 import { parser } from "./syntax.grammar";
-import {
-  LRLanguage,
-  LanguageSupport,
-  indentNodeProp,
-  foldNodeProp,
-  foldInside,
-  delimitedIndent,
-} from "@codemirror/language";
+import { LRLanguage, LanguageSupport } from "@codemirror/language";
 import { styleTags, tags as t } from "@lezer/highlight";
 
 export const ScallopLanguage = LRLanguage.define({
@@ -24,6 +17,7 @@ export const ScallopLanguage = LRLanguage.define({
         "Var/Identifier Expr/Identifier": t.function(t.variableName),
         ArithOp: t.arithmeticOperator,
         LogicOp: t.logicOperator,
+        WordOp: t.logicOperator,
         CompareOp: t.compareOperator,
       }),
     ],
