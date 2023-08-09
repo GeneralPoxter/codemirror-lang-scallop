@@ -1,6 +1,6 @@
 @top Program { Item* }
 
-@precedence { op @left }
+@precedence { op @left, as @right }
 
 @skip { space | LineComment }
 
@@ -53,7 +53,7 @@ Const_Decl {
 }
 
 Constant {
-  Boolean | Number | String
+  Boolean | Number | String | Identifier
 }
 
 Const_Tuple {
@@ -69,11 +69,11 @@ Const_Expr[@dynamicPrecedence=1] {
 }
 
 Expr {
-  Identifier |
   Constant ~constant |
   Expr !op bin_op Expr | unary_op Expr |
   "$" Identifier Param_List<Expr> |
   Keyword<"if"> Expr Keyword<"then"> Expr Keyword<"else"> Expr |
+  Expr !as Keyword<"as"> Type |
   "(" Expr ")"
 }
 

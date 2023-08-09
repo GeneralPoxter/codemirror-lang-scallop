@@ -64,16 +64,18 @@ rel sum(a + b) = digit1(a) /\ digit2(b)
 rel 1.0::eq(a == b) :- bool1(a), bool2(b)
 rel andRel(a and b) :- bool1(a), bool2(b)
 rel notRel(not(a), not(b)) :- bool1(a), bool2(b)
+rel boolStr(not a as String) = bool1(a)
 
 ==>
 
 Program(
-  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Identifier),Expr(Identifier))),Formula(Formula(Atom(Identifier,Param_List(Expr(Identifier),Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Identifier),Expr(Identifier)))))))),
-  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Identifier))),Formula(Formula(Atom(Identifier,Param_List(Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Identifier)))))))),
-  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Expr(Identifier),ArithOp,Expr(Identifier)))),Formula(Formula(Atom(Identifier,Param_List(Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Identifier)))))))),
-  Item(Relation_Decl(Rule_Decl(Keyword(rel),Tagged(Tag(Number),Atom(Identifier,Param_List(Expr(Expr(Identifier),CompareOp,Expr(Identifier))))),Formula(Formula(Atom(Identifier,Param_List(Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Identifier)))))))),
-  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Expr(Identifier),WordOp,Expr(Identifier)))),Formula(Formula(Atom(Identifier,Param_List(Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Identifier)))))))),
-  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(WordOp,Expr(Expr(Identifier))),Expr(WordOp,Expr(Expr(Identifier))))),Formula(Formula(Atom(Identifier,Param_List(Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Identifier))))))))
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Constant(Identifier)),Expr(Constant(Identifier)))),Formula(Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier)),Expr(Constant(Identifier))))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier)),Expr(Constant(Identifier))))))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Constant(Identifier)))),Formula(Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier))))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier))))))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Expr(Constant(Identifier)),ArithOp,Expr(Constant(Identifier))))),Formula(Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier))))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier))))))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Tagged(Tag(Number),Atom(Identifier,Param_List(Expr(Expr(Constant(Identifier)),CompareOp,Expr(Constant(Identifier)))))),Formula(Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier))))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier))))))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Expr(Constant(Identifier)),WordOp,Expr(Constant(Identifier))))),Formula(Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier))))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier))))))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(WordOp,Expr(Expr(Constant(Identifier)))),Expr(WordOp,Expr(Expr(Constant(Identifier)))))),Formula(Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier))))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier))))))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(WordOp,Expr(Expr(Constant(Identifier)),Keyword(as),Type)))),Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier))))))))
 )
 
 # Query Declarations
