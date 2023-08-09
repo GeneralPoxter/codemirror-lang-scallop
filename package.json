@@ -29,5 +29,21 @@
     "rollup-plugin-ts": "^3.0.2",
     "typescript": "^4.3.4"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GeneralPoxter/codemirror-lang-scallop.git"
+  },
+  "keywords": [
+    "codemirror",
+    "scallop"
+  ],
+  "author": "Jason Liu <jasonhl@seas.upenn.edu>",
+  "bugs": {
+    "url": "https://github.com/GeneralPoxter/codemirror-lang-scallop/issues"
+  },
+  "homepage": "https://github.com/GeneralPoxter/codemirror-lang-scallop#readme"
 }

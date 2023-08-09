@@ -145,7 +145,7 @@ Keyword<term> { @specialize[@name={term}]<Identifier, term> }
   @precedence {
     LineComment,
     String, Number,
-    ArithOp, LogicOp, CompareOp,
+    LogicOp, ArithOp, CompareOp,
     Identifier
   }
 }

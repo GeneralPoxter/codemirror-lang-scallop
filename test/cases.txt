@@ -59,7 +59,8 @@ Program(
 # Rule Declarations
 
 rel grandparent(a, b) = parent(a, b), parent(b, c)
-rel sum(a + b) = digit1(a), digit2(b)
+rel exists(a) = exist1(a) \/ exist2(b)
+rel sum(a + b) = digit1(a) /\ digit2(b)
 rel 1.0::eq(a == b) :- bool1(a), bool2(b)
 rel land(not(a and b)) :- bool1(a), bool2(b)
 
@@ -67,6 +68,7 @@ rel land(not(a and b)) :- bool1(a), bool2(b)
 
 Program(
   Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Identifier),Expr(Identifier))),Formula(Formula(Atom(Identifier,Param_List(Expr(Identifier),Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Identifier),Expr(Identifier)))))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Identifier))),Formula(Formula(Atom(Identifier,Param_List(Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Identifier)))))))),
   Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Expr(Identifier),Bin_Op(ArithOp),Expr(Identifier)))),Formula(Formula(Atom(Identifier,Param_List(Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Identifier)))))))),
   Item(Relation_Decl(Rule_Decl(Keyword(rel),Tagged(Tag(Number),Atom(Identifier,Param_List(Expr(Expr(Identifier),CompareOp,Expr(Identifier))))),Formula(Formula(Atom(Identifier,Param_List(Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Identifier)))))))),
   Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Unary_Op(LogicOp),Expr(Expr(Expr(Identifier),Bin_Op(LogicOp),Expr(Identifier)))))),Formula(Formula(Atom(Identifier,Param_List(Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Identifier))))))))
