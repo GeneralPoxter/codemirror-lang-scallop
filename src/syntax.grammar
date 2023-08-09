@@ -1,6 +1,6 @@
 @top Program { Item* }
 
-@precedence { op @left, as @right }
+@precedence { op @left }
 
 @skip { space | LineComment }
 
@@ -73,7 +73,7 @@ Expr {
   Expr !op bin_op Expr | unary_op Expr |
   "$" Identifier Param_List<Expr> |
   Keyword<"if"> Expr Keyword<"then"> Expr Keyword<"else"> Expr |
-  Expr !as Keyword<"as"> Type |
+  Expr !op Keyword<"as"> Type |
   "(" Expr ")"
 }
 
@@ -108,7 +108,7 @@ Tagged<expr> {
 
 Boolean { @specialize<Identifier, "true" | "false"> }
 
-unary_op { ArithOp<"-"> | LogicOp<"!"> | WordOp<"not"> }
+unary_op { ArithOp<"-"> | LogicOp<"!"> }
 
 bin_op {
   ArithOp<"+"> | ArithOp<"-"> | ArithOp<"*"> | ArithOp<"/"> | ArithOp<"%"> | ArithOp<"^"> |
