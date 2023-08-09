@@ -138,7 +138,6 @@ Keyword<term> { @specialize[@name={term}]<Identifier, term> }
 
   ArithOp<expr> { expr }
   LogicOp<expr> { expr }
-
   CompareOp { ("<" | ">" | "==" | "!=") "="? }
 
   space { @whitespace+ }
