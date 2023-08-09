@@ -13,13 +13,11 @@ const str_b : String = "one\"\\two"
 ==>
 
 Program(
-  Item(Const_Decl(Keyword(const),Identifier,Constant(Boolean))),
-  Item(Const_Decl(Keyword(const),Identifier,Type,Constant(Boolean))),
-  Item(Const_Decl(Keyword(const),Identifier,Constant(Number))),
-  Item(Const_Decl(Keyword(const),Identifier,Constant(Number))),
-  Item(Const_Decl(Keyword(const),Identifier,Type,Constant(Number))),
-  Item(Const_Decl(Keyword(const),Identifier,Constant(String))),
-  Item(Const_Decl(Keyword(const),Identifier,Type,Constant(String)))
+  Item(Const_Decl(Keyword(const),Var(Identifier),Constant(Boolean))),
+  Item(Const_Decl(Keyword(const),Var(Identifier,Type),Constant(Boolean))),
+  Item(Const_Decl(Keyword(const),Var(Identifier),Constant(Number))),
+  Item(Const_Decl(Keyword(const),Var(Identifier),Constant(Number))),
+  Item(Const_Decl(Keyword(const),Var(Identifier,Type),Constant(Number))),Item(Const_Decl(Keyword(const),Var(Identifier),Constant(String))),Item(Const_Decl(Keyword(const),Var(Identifier,Type),Constant(String)))
 )
 
 # Type Declarations
@@ -34,8 +32,8 @@ type parent(a: String, b: String)
 Program(
   Item(Type_Decl(Keyword(type),Identifier,Type)),
   Item(Type_Decl(Keyword(type),Identifier,Type)),
-  Item(Type_Decl(Keyword(type),Identifier,"(",Type,Type,")")),
-  Item(Type_Decl(Keyword(type),Identifier,"(",Identifier,Type,Identifier,Type,")"))
+  Item(Type_Decl(Keyword(type),Identifier,Param_List(Type,Type))),
+  Item(Type_Decl(Keyword(type),Identifier,Param_List(Var(Identifier,Type),Var(Identifier,Type))))
 )
 
 # Fact Declarations
@@ -52,10 +50,10 @@ rel bool_tag = { true::(3.5,); false::(4.5) }
 ==>
 
 Program(
-  Item(Relation_Decl(Facts_Set_Decl(Keyword(rel),Identifier,"{","}"))),
-  Item(Relation_Decl(Facts_Set_Decl(Keyword(rel),Identifier,"{",Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),"}"))),
-  Item(Relation_Decl(Facts_Set_Decl(Keyword(rel),Identifier,"{",Tag(Number),Const_Tuple("(",Constant(Number),Constant(String),")"),Tag(Number),Const_Tuple("(",Constant(Number),Constant(String),")"),Tag(Number),Const_Tuple("(",Constant(Number),Constant(String),")"),Tag(Number),Const_Tuple("(",Constant(Number),Constant(String),")"),Tag(Number),Const_Tuple("(",Constant(Number),Constant(String),")"),Tag(Number),Const_Tuple("(",Constant(Number),Constant(String),")"),Tag(Number),Const_Tuple("(",Constant(Number),Constant(String),")"),Tag(Number),Const_Tuple("(",Constant(Number),Constant(String),")"),Tag(Number),Const_Tuple("(",Constant(Number),Constant(String),")"),"}"))),
-  Item(Relation_Decl(Facts_Set_Decl(Keyword(rel),Identifier,"{",Tag(Boolean),Const_Tuple("(",Constant(Number),")"),Tag(Boolean),Const_Tuple("(",Constant(Number),")"),"}")))
+  Item(Relation_Decl(Facts_Set_Decl(Keyword(rel),Identifier,Facts_Set))),
+  Item(Relation_Decl(Facts_Set_Decl(Keyword(rel),Identifier,Facts_Set(Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)))))),
+  Item(Relation_Decl(Facts_Set_Decl(Keyword(rel),Identifier,Facts_Set(Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))),Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))),Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))),Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))),Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))),Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))),Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))),Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))),Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))))))),
+  Item(Relation_Decl(Facts_Set_Decl(Keyword(rel),Identifier,Facts_Set(Tagged(Tag(Boolean),Const_Tuple(Constant(Number))),Tagged(Tag(Boolean),Const_Tuple(Constant(Number)))))))
 )
 
 # Rule Declarations
@@ -63,13 +61,15 @@ Program(
 rel grandparent(a, b) = parent(a, b), parent(b, c)
 rel sum(a + b) = digit1(a), digit2(b)
 rel 1.0::eq(a == b) :- bool1(a), bool2(b)
+rel land(not(a and b)) :- bool1(a), bool2(b)
 
 ==>
 
 Program(
-  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,"(",Expr(Identifier),Expr(Identifier),")"),Formula(Formula(Atom(Identifier,"(",Expr(Identifier),Expr(Identifier),")")),Formula_Op,Formula(Atom(Identifier,"(",Expr(Identifier),Expr(Identifier),")")))))),
-  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,"(",Expr(Expr(Identifier),Bin_Op,Expr(Identifier)),")"),Formula(Formula(Atom(Identifier,"(",Expr(Identifier),")")),Formula_Op,Formula(Atom(Identifier,"(",Expr(Identifier),")")))))),
-  Item(Relation_Decl(Rule_Decl(Keyword(rel),Tag(Number),Atom(Identifier,"(",Expr(Expr(Identifier),Bin_Op,Expr(Identifier)),")"),Formula(Formula(Atom(Identifier,"(",Expr(Identifier),")")),Formula_Op,Formula(Atom(Identifier,"(",Expr(Identifier),")"))))))
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Identifier),Expr(Identifier))),Formula(Formula(Atom(Identifier,Param_List(Expr(Identifier),Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Identifier),Expr(Identifier)))))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Expr(Identifier),Bin_Op(ArithOp),Expr(Identifier)))),Formula(Formula(Atom(Identifier,Param_List(Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Identifier)))))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Tagged(Tag(Number),Atom(Identifier,Param_List(Expr(Expr(Identifier),CompareOp,Expr(Identifier))))),Formula(Formula(Atom(Identifier,Param_List(Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Identifier)))))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Unary_Op(LogicOp),Expr(Expr(Expr(Identifier),Bin_Op(LogicOp),Expr(Identifier)))))),Formula(Formula(Atom(Identifier,Param_List(Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Identifier))))))))
 )
 
 # Query Declarations
