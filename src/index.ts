@@ -3,8 +3,11 @@ import {
   LRLanguage,
   LanguageSupport,
   HighlightStyle,
+  syntaxHighlighting,
+  syntaxTree,
 } from "@codemirror/language";
 import { styleTags, tags as t } from "@lezer/highlight";
+import { linter, lintGutter, type Diagnostic } from "@codemirror/lint";
 
 export const ScallopLanguage = LRLanguage.define({
   parser: parser.configure({
@@ -14,11 +17,11 @@ export const ScallopLanguage = LRLanguage.define({
         String: t.string,
         Boolean: t.bool,
         Number: t.number,
-        "Keyword!": t.keyword,
         Type: t.typeName,
+        Identifier: t.name,
+        "Keyword!": t.keyword,
         "Tag!": t.tagName,
-        Identifier: t.labelName,
-        "Var/Identifier Expr/Identifier Constant/Identifier": t.name,
+        "Var/Identifier Expr/Identifier Constant/Identifier": t.variableName,
         ArithOp: t.arithmeticOperator,
         LogicOp: t.logicOperator,
         WordOp: t.logicOperator,
@@ -31,7 +34,7 @@ export const ScallopLanguage = LRLanguage.define({
   },
 });
 
-export function ScallopHighlightStyle(theme: String) {
+export function ScallopHighlighter(theme: String) {
   let chalky = "#e5c07b",
     coral = "#e06c75",
     cyan = "#56b6c2",
@@ -53,17 +56,36 @@ export function ScallopHighlightStyle(theme: String) {
       (violet = "#a626a4");
   }
 
-  return HighlightStyle.define([
-    { tag: t.keyword, color: violet },
-    { tag: t.name, color: coral },
-    { tag: t.labelName, color: malibu },
-    { tag: [t.tagName, t.bool], color: whiskey },
-    { tag: [t.typeName, t.number], color: chalky },
-    { tag: t.operator, color: cyan },
-    { tag: t.comment, color: stone },
-    { tag: t.string, color: sage },
-  ]);
+  return syntaxHighlighting(
+    HighlightStyle.define([
+      { tag: t.keyword, color: violet },
+      { tag: t.variableName, color: coral },
+      { tag: t.name, color: malibu },
+      { tag: [t.tagName, t.bool], color: whiskey },
+      { tag: [t.typeName, t.number], color: chalky },
+      { tag: t.operator, color: cyan },
+      { tag: t.comment, color: stone },
+      { tag: t.string, color: sage },
+    ])
+  );
 }
+
+export const ScallopLinter = linter((view) => {
+  const diagnostics: Diagnostic[] = [];
+  syntaxTree(view.state).iterate({
+    enter: (node) => {
+      if (node.type.isError) {
+        diagnostics.push({
+          from: node.from,
+          to: node.to,
+          severity: "error",
+          message: "Syntax error",
+        });
+      }
+    },
+  });
+  return diagnostics;
+});
 
 export function Scallop() {
   return new LanguageSupport(ScallopLanguage);
