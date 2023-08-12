@@ -26,14 +26,17 @@ type a = i32
 type b <: bool
 type parent(String, String)
 type parent(a: String, b: String)
+type extract_mentioned_date (question: String, label: String, date: DateTime),
+     extract_goal           (question: String, goal: String),
+     extract_relationship   (question: String, earlier_date: String, later_date: String, diff: Duration),
 
 ==>
 
 Program(
-  Item(Type_Decl(Keyword(type),Identifier,Type)),
-  Item(Type_Decl(Keyword(type),Identifier,Type)),
+  Item(Type_Decl(Keyword(type),Identifier,Type)),Item(Type_Decl(Keyword(type),Identifier,Type)),
   Item(Type_Decl(Keyword(type),Identifier,Param_List(Type,Type))),
-  Item(Type_Decl(Keyword(type),Identifier,Param_List(Var(Identifier,Type),Var(Identifier,Type))))
+  Item(Type_Decl(Keyword(type),Identifier,Param_List(Var(Identifier,Type),Var(Identifier,Type)))),
+  Item(Type_Decl(Keyword(type),Identifier,Param_List(Var(Identifier,Type),Var(Identifier,Type),Var(Identifier,Type)),Identifier,Param_List(Var(Identifier,Type),Var(Identifier,Type)),Identifier,Param_List(Var(Identifier,Type),Var(Identifier,Type),Var(Identifier,Type),Var(Identifier,Type))))
 )
 
 # Fact Declarations

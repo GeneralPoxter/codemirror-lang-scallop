@@ -7,7 +7,7 @@ import {
   syntaxTree,
 } from "@codemirror/language";
 import { styleTags, tags as t } from "@lezer/highlight";
-import { linter, lintGutter, type Diagnostic } from "@codemirror/lint";
+import { linter, type Diagnostic } from "@codemirror/lint";
 
 export const ScallopLanguage = LRLanguage.define({
   parser: parser.configure({

@@ -8,6 +8,10 @@ commaSep<content> {
   (content ("," content)* ","?)?
 }
 
+commaSep1<content> {
+  content ("," content)* ","?
+}
+
 semiSep<content> {
   (content (";" content)* ";"?)?
 }
@@ -22,8 +26,8 @@ Item {
 Type_Decl {
   Keyword<"type"> Identifier "=" Type |
   Keyword<"type"> Identifier "<:" Type |
-  Keyword<"type"> Identifier Param_List<Type> |
-  Keyword<"type"> Identifier Param_List<Var> |
+  Keyword<"type"> commaSep1<Identifier Param_List<Type>> |
+  Keyword<"type"> commaSep1<Identifier Param_List<Var>> |
   Keyword<"type"> "$" Identifier Param_List<Var> ("->" Type)?
 }
 
@@ -125,7 +129,8 @@ WordOp<term> { @specialize<Identifier, term> }
 Type { @specialize<Identifier, 
   "u8" | "u16" | "u32" | "u64" | "u128" | "usize" |
   "i8" | "i16" | "i32" | "i64" | "i128" | "isize" |
-  "f32" | "f64" | "char" | "bool" | "String"> }
+  "f32" | "f64" | "char" | "bool" | "String" |
+  "DateTime" | "Duration" | "Tensor"> }
 
 Keyword<term> { @specialize[@name={term}]<Identifier, term> }
 
