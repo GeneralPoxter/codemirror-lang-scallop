@@ -16,6 +16,24 @@ semiSep<content> {
   (content (";" content)* ";"?)?
 }
 
+Boolean { @specialize<Identifier, "true" | "false"> }
+
+unary_op { ArithOp<"-"> | LogicOp<"!"> }
+
+bin_op {
+  ArithOp<"+" | "-" | "*" | "/"| "%" | "^"> |
+  LogicOp<"&&" | "||"> | WordOp<"and" | "or" | "implies"> | CompareOp
+}
+
+formula_op {
+  LogicOp<"," | "/\\" | "\\/" | "=>"> |
+  WordOp<"and" | "or" | "implies">
+}
+
+WordOp<term> { @specialize<Identifier, term> }
+
+Keyword<term> { @specialize[@name={term}]<Identifier, term> }
+
 Item {
   Type_Decl |
   Relation_Decl |
@@ -23,83 +41,27 @@ Item {
   Query_Decl
 }
 
-Type_Decl {
-  Keyword<"type"> Identifier "=" Type |
-  Keyword<"type"> Identifier "<:" Type |
-  Keyword<"type"> commaSep1<Identifier Param_List<Type>> |
-  Keyword<"type"> commaSep1<Identifier Param_List<Var>> |
-  Keyword<"type"> "$" Identifier Param_List<Var> ("->" Type)?
-}
+Type { @specialize<Identifier, 
+  "u8" | "u16" | "u32" | "u64" | "u128" | "usize" |
+  "i8" | "i16" | "i32" | "i64" | "i128" | "isize" |
+  "f32" | "f64" | "char" | "bool" | "String" |
+  "DateTime" | "Duration" | "Tensor"> }
+
+Adornment { @specialize<Identifier, "bound" | "free" >}
 
 Var { Identifier (":" Type)? }
 
-Relation_Decl {
-  Fact_Decl | Facts_Set_Decl | Rule_Decl
-}
-
-Fact_Decl {
-  Keyword<"rel"> Identifier Param_List<Const_Expr> |
-  Keyword<"rel"> Tagged<Identifier Param_List<Const_Expr>>
-}
-
-Facts_Set_Decl { Keyword<"rel"> Identifier "=" Facts_Set }
-
-Facts_Set {
-  "{" (
-    commaSep<Const_Tuple> ~ambigFacts |
-    commaSep<Tagged<Const_Tuple>> ~ambigFacts |
-    semiSep<Tagged<Const_Tuple>> ~ambigFacts
-  ) "}"
-}
-
-Const_Decl {
-  Keyword<"const"> Var "=" Constant
-}
-
-Constant {
-  Boolean | Number | String | Identifier
-}
-
-Const_Tuple {
-  Constant | "(" commaSep<Constant> ")"
-}
-
-Const_Expr[@dynamicPrecedence=1] {
-  Constant ~constant |
-  Const_Expr !op bin_op Const_Expr | unary_op Const_Expr |
-  "$" Identifier Param_List<Const_Expr> |
-  Keyword<"if"> Const_Expr Keyword<"then"> Const_Expr Keyword<"else"> Const_Expr |
-  "(" Const_Expr ")"
-}
-
-Expr {
-  Constant ~constant |
-  Expr !op bin_op Expr | unary_op Expr |
-  "$" Identifier Param_List<Expr> |
-  Keyword<"if"> Expr Keyword<"then"> Expr Keyword<"else"> Expr |
-  Expr !op Keyword<"as"> Type |
-  "(" Expr ")"
-}
-
-Atom {
-  Identifier Param_List<Expr>
-}
-
 Param_List<expr> { "(" commaSep<expr> ~ambigParams ")" }
 
-Formula {
-  Atom | "~" Atom | WordOp<"not"> Atom |
-  Formula !op formula_op Formula |
-  "(" Formula ")"
+Type_Decl {
+  Keyword<"type"> Identifier AssignOp<"<:"> Type |
+  Keyword<"type"> commaSep1<Identifier Param_List<Type>> |
+  Keyword<"type"> commaSep1<Identifier Param_List<Var | Adornment Var>> |
+  Keyword<"type"> FFIdentifier Param_List<Var> ("->" Type)?
 }
 
-Rule_Decl {
-  Keyword<"rel"> Atom ":-" Formula | Keyword<"rel"> Atom "=" Formula |
-  Keyword<"rel"> Tagged<Atom> ":-" Formula | Keyword<"rel"> Tagged<Atom> "=" Formula
-}
-
-Query_Decl {
-  Keyword<"query"> Identifier | Keyword<"query"> Atom
+Relation_Decl {
+  Fact_Decl | Facts_Set_Decl | Rule_Decl
 }
 
 Tag {
@@ -110,32 +72,100 @@ Tagged<expr> {
   Tag "::" expr
 }
 
-Boolean { @specialize<Identifier, "true" | "false"> }
-
-unary_op { ArithOp<"-"> | LogicOp<"!"> }
-
-bin_op {
-  ArithOp<"+"> | ArithOp<"-"> | ArithOp<"*"> | ArithOp<"/"> | ArithOp<"%"> | ArithOp<"^"> |
-  LogicOp<"&&"> | LogicOp<"||"> | WordOp<"and"> | WordOp<"or"> | WordOp<"implies"> | CompareOp
+Fact_Decl {
+  Keyword<"rel"> Identifier Param_List<Const_Expr> |
+  Keyword<"rel"> Tagged<Identifier Param_List<Const_Expr>>
 }
 
-formula_op {
-  LogicOp<","> | LogicOp<"/\\"> | LogicOp<"\\/"> | LogicOp<"=>"> |
-  WordOp<"and"> | WordOp<"or"> | WordOp<"implies">
+Facts_Set_Decl {
+  Keyword<"rel"> Identifier AssignOp<":="> Facts_Set
 }
 
-WordOp<term> { @specialize<Identifier, term> }
+Facts_Set {
+  "{" (
+    commaSep<Const_Tuple> ~ambigFacts |
+    commaSep<Tagged<Const_Tuple>> ~ambigFacts |
+    semiSep<Tagged<Const_Tuple>> ~ambigFacts
+  ) "}"
+}
 
-Type { @specialize<Identifier, 
-  "u8" | "u16" | "u32" | "u64" | "u128" | "usize" |
-  "i8" | "i16" | "i32" | "i64" | "i128" | "isize" |
-  "f32" | "f64" | "char" | "bool" | "String" |
-  "DateTime" | "Duration" | "Tensor"> }
+Const_Decl {
+  Keyword<"const"> Var AssignOp<":="> Constant
+}
 
-Keyword<term> { @specialize[@name={term}]<Identifier, term> }
+Constant {
+  Boolean | Number | String
+}
+
+Const_Tuple {
+  Constant | "(" commaSep<Constant> ")"
+}
+
+Const_Expr[@dynamicPrecedence=1] {
+  Constant ~constant |
+  Const_Expr !op bin_op Const_Expr | unary_op Const_Expr |
+  FFIdentifier Param_List<Const_Expr> |
+  Keyword<"if"> Const_Expr Keyword<"then"> Const_Expr Keyword<"else"> Const_Expr |
+  "(" Const_Expr ")"
+}
+
+Expr {
+  Identifier |
+  Constant ~constant |
+  Expr !op bin_op Expr | unary_op Expr |
+  FFIdentifier Param_List<Expr> |
+  Keyword<"if"> Expr Keyword<"then"> Expr Keyword<"else"> Expr |
+  Expr !op Keyword<"as"> Type |
+  "(" Expr ~ambigExpr  ")"
+}
+
+Atom {
+  Identifier Param_List<Expr>
+}
+
+Formula {
+  Atom | "~" Atom | WordOp<"not"> Atom |
+  Formula !op formula_op Formula |
+  Constraint | Aggregation |
+  "(" Formula ")"
+}
+
+Constraint {
+  Expr ~ambigExpr
+}
+
+Rule_Decl {
+  Keyword<"rel"> Atom AssignOp<":-" | ":="> Formula |
+  Keyword<"rel"> Tagged<Atom> AssignOp<":-" | ":=">  Formula
+}
+
+Aggregator { @extend<Identifier,
+  "count" | "count!" | "top" | 
+  "sum" | "prod" | "min" | "max" |
+  "exists" | "forall" | "unique"> }
+
+Bool_Aggregator { @extend<Identifier, "forall" | "unique"> }
+
+Group_Vars { commaSep1<Identifier> }
+
+Aggregation_Args {
+  "[" commaSep1<Identifier> "]" | "<" commaSep1<Constant> ">"
+}
+
+Aggregation {
+  Identifier AssignOp<":="> Aggregator Aggregation_Args? "(" Group_Vars ":" Formula
+    (Keyword<"where"> Group_Vars ":" Formula)? ")" |
+  Bool_Aggregator "(" Group_Vars ":" Formula ")"
+}
+
+Query_Decl {
+  Keyword<"query"> Identifier | Keyword<"query"> Atom
+}
 
 @tokens {
-  Identifier { $[a-zA-Z_0-9]+ }
+  FFIdentifier { "$" Identifier }
+  FAIdentifier { "@" Identifier }
+  Identifier { $[a-zA-Z_] $[a-zA-Z_0-9]* }
 
   Number { (@digit ("_" | @digit)* ("." ("_" | @digit)*)? | "." @digit ("_" | @digit)*) }
 
@@ -145,15 +175,13 @@ Keyword<term> { @specialize[@name={term}]<Identifier, term> }
 
   ArithOp<expr> { expr }
   LogicOp<expr> { expr }
-  CompareOp { ("<" | ">" | "==" | "!=") "="? }
+  AssignOp<expr> { expr | "=" }
+  CompareOp { ("<" | ">") "="? | "==" | "!=" }
 
   space { @whitespace+ }
 
   @precedence {
-    LineComment,
-    String, Number,
-    LogicOp, ArithOp, CompareOp,
-    Identifier
+    LineComment, String, Number, ArithOp
   }
 }
 

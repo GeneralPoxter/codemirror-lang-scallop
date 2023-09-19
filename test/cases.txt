@@ -13,12 +13,14 @@ const str_b : String = "one\"\\two"
 ==>
 
 Program(
-  Item(Const_Decl(Keyword(const),Var(Identifier),Constant(Boolean))),
-  Item(Const_Decl(Keyword(const),Var(Identifier,Type),Constant(Boolean))),
-  Item(Const_Decl(Keyword(const),Var(Identifier),Constant(Number))),
-  Item(Const_Decl(Keyword(const),Var(Identifier),Constant(Number))),
-  Item(Const_Decl(Keyword(const),Var(Identifier,Type),Constant(Number))),Item(Const_Decl(Keyword(const),Var(Identifier),Constant(String))),Item(Const_Decl(Keyword(const),Var(Identifier,Type),Constant(String)))
-)
+  Item(Const_Decl(Keyword(const),Var(Identifier),AssignOp,Constant(Boolean))),
+  Item(Const_Decl(Keyword(const),Var(Identifier,Type),AssignOp,Constant(Boolean))),
+  Item(Const_Decl(Keyword(const),Var(Identifier),AssignOp,Constant(Number))),
+  Item(Const_Decl(Keyword(const),Var(Identifier),AssignOp,Constant(Number))),
+  Item(Const_Decl(Keyword(const),Var(Identifier,Type),AssignOp,Constant(Number))),
+  Item(Const_Decl(Keyword(const),Var(Identifier),AssignOp,Constant(String))),
+  Item(Const_Decl(Keyword(const),Var(Identifier,Type),AssignOp,Constant(String)))
+) 
 
 # Type Declarations
 
@@ -29,14 +31,19 @@ type parent(a: String, b: String)
 type extract_mentioned_date (question: String, label: String, date: DateTime),
      extract_goal           (question: String, goal: String),
      extract_relationship   (question: String, earlier_date: String, later_date: String, diff: Duration),
+type $py_eval_number(s: String) -> f32
+type face_name(bound face: Tensor, bound list: String, name: String)
 
 ==>
 
 Program(
-  Item(Type_Decl(Keyword(type),Identifier,Type)),Item(Type_Decl(Keyword(type),Identifier,Type)),
+  Item(Type_Decl(Keyword(type),Identifier,AssignOp,Type)),
+  Item(Type_Decl(Keyword(type),Identifier,AssignOp,Type)),
   Item(Type_Decl(Keyword(type),Identifier,Param_List(Type,Type))),
   Item(Type_Decl(Keyword(type),Identifier,Param_List(Var(Identifier,Type),Var(Identifier,Type)))),
-  Item(Type_Decl(Keyword(type),Identifier,Param_List(Var(Identifier,Type),Var(Identifier,Type),Var(Identifier,Type)),Identifier,Param_List(Var(Identifier,Type),Var(Identifier,Type)),Identifier,Param_List(Var(Identifier,Type),Var(Identifier,Type),Var(Identifier,Type),Var(Identifier,Type))))
+  Item(Type_Decl(Keyword(type),Identifier,Param_List(Var(Identifier,Type),Var(Identifier,Type),Var(Identifier,Type)),Identifier,Param_List(Var(Identifier,Type),Var(Identifier,Type)),Identifier,Param_List(Var(Identifier,Type),Var(Identifier,Type),Var(Identifier,Type),Var(Identifier,Type)))),
+  Item(Type_Decl(Keyword(type),FFIdentifier,Param_List(Var(Identifier,Type)),Type)),
+  Item(Type_Decl(Keyword(type),Identifier,Param_List(Adornment,Var(Identifier,Type),Adornment,Var(Identifier,Type),Var(Identifier,Type))))
 )
 
 # Fact Declarations
@@ -53,10 +60,10 @@ rel bool_tag = { true::(3.5,); false::(4.5) }
 ==>
 
 Program(
-  Item(Relation_Decl(Facts_Set_Decl(Keyword(rel),Identifier,Facts_Set))),
-  Item(Relation_Decl(Facts_Set_Decl(Keyword(rel),Identifier,Facts_Set(Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)))))),
-  Item(Relation_Decl(Facts_Set_Decl(Keyword(rel),Identifier,Facts_Set(Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))),Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))),Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))),Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))),Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))),Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))),Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))),Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))),Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))))))),
-  Item(Relation_Decl(Facts_Set_Decl(Keyword(rel),Identifier,Facts_Set(Tagged(Tag(Boolean),Const_Tuple(Constant(Number))),Tagged(Tag(Boolean),Const_Tuple(Constant(Number)))))))
+  Item(Relation_Decl(Facts_Set_Decl(Keyword(rel),Identifier,AssignOp,Facts_Set))),
+  Item(Relation_Decl(Facts_Set_Decl(Keyword(rel),Identifier,AssignOp,Facts_Set(Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)),Const_Tuple(Constant(String)))))),
+  Item(Relation_Decl(Facts_Set_Decl(Keyword(rel),Identifier,AssignOp,Facts_Set(Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))),Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))),Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))),Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))),Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))),Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))),Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))),Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))),Tagged(Tag(Number),Const_Tuple(Constant(Number),Constant(String))))))),
+  Item(Relation_Decl(Facts_Set_Decl(Keyword(rel),Identifier,AssignOp,Facts_Set(Tagged(Tag(Boolean),Const_Tuple(Constant(Number))),Tagged(Tag(Boolean),Const_Tuple(Constant(Number)))))))
 )
 
 # Rule Declarations
@@ -72,13 +79,13 @@ rel negStr((-a) as String) = num(a)
 ==>
 
 Program(
-  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Constant(Identifier)),Expr(Constant(Identifier)))),Formula(Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier)),Expr(Constant(Identifier))))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier)),Expr(Constant(Identifier))))))))),
-  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Constant(Identifier)))),Formula(Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier))))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier))))))))),
-  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Expr(Constant(Identifier)),ArithOp,Expr(Constant(Identifier))))),Formula(Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier))))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier))))))))),
-  Item(Relation_Decl(Rule_Decl(Keyword(rel),Tagged(Tag(Number),Atom(Identifier,Param_List(Expr(Expr(Constant(Identifier)),CompareOp,Expr(Constant(Identifier)))))),Formula(Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier))))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier))))))))),
-  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Expr(Constant(Identifier)),WordOp,Expr(Constant(Identifier))))),Formula(Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier))))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier))))))))),
-  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(LogicOp,Expr(Constant(Identifier))),Expr(ArithOp,Expr(Constant(Identifier))))),Formula(Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier))))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier))))))))),
-  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Expr(Expr(ArithOp,Expr(Constant(Identifier)))),Keyword(as),Type))),Formula(Atom(Identifier,Param_List(Expr(Constant(Identifier))))))))
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Identifier),Expr(Identifier))),AssignOp,Formula(Formula(Atom(Identifier,Param_List(Expr(Identifier),Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Identifier),Expr(Identifier)))))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Identifier))),AssignOp,Formula(Formula(Atom(Identifier,Param_List(Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Identifier)))))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Expr(Identifier),ArithOp,Expr(Identifier)))),AssignOp,Formula(Formula(Atom(Identifier,Param_List(Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Identifier)))))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Tagged(Tag(Number),Atom(Identifier,Param_List(Expr(Expr(Identifier),CompareOp,Expr(Identifier))))),AssignOp,Formula(Formula(Atom(Identifier,Param_List(Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Identifier)))))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Expr(Identifier),WordOp,Expr(Identifier)))),AssignOp,Formula(Formula(Atom(Identifier,Param_List(Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Identifier)))))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(LogicOp,Expr(Identifier)),Expr(ArithOp,Expr(Identifier)))),AssignOp,Formula(Formula(Atom(Identifier,Param_List(Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Identifier)))))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Expr(Expr(ArithOp,Expr(Identifier))),Keyword(as),Type))),AssignOp,Formula(Atom(Identifier,Param_List(Expr(Identifier)))))))
 )
 
 # Query Declarations
@@ -88,3 +95,29 @@ query your_mom
 ==>
 
 Program(Item(Query_Decl(Keyword(query),Identifier)))
+
+# Aggregations
+
+rel num_animals(n) :- n = count(o: name(o, "animal"))
+rel num_edges(n) = n := count(a, b: edge(a, b))
+rel num_obj_per_color(col, num) = num := count(obj: obj_color(obj, col))
+rel num_obj_per_color(col, num) = num := count(obj: obj_color(obj, col) where col: colors(col))
+rel total_sales(s) = s := sum(sp: sales_1(p, sp))
+rel best_student(n) = _ := max[n](s: exam_grades(n, s))
+rel path(a, c) = exists(b: path(a, b) and edge(b, c))
+rel target(b) = b := forall(o: object(o) implies obj_shape(o, SPHERE))
+rel identity(id, name) = name := top<1>(name: face_name(img, $string_concat(list), name), face_image(id, img), names(list))
+
+==>
+
+Program(
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Identifier))),AssignOp,Formula(Aggregation(Identifier,AssignOp,Aggregator,Group_Vars(Identifier),Formula(Atom(Identifier,Param_List(Expr(Identifier),Expr(Constant(String)))))))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Identifier))),AssignOp,Formula(Aggregation(Identifier,AssignOp,Aggregator,Group_Vars(Identifier,Identifier),Formula(Atom(Identifier,Param_List(Expr(Identifier),Expr(Identifier))))))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Identifier),Expr(Identifier))),AssignOp,Formula(Aggregation(Identifier,AssignOp,Aggregator,Group_Vars(Identifier),Formula(Atom(Identifier,Param_List(Expr(Identifier),Expr(Identifier))))))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Identifier),Expr(Identifier))),AssignOp,Formula(Aggregation(Identifier,AssignOp,Aggregator,Group_Vars(Identifier),Formula(Atom(Identifier,Param_List(Expr(Identifier),Expr(Identifier)))),Keyword(where),Group_Vars(Identifier),Formula(Atom(Identifier,Param_List(Expr(Identifier))))))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Identifier))),AssignOp,Formula(Aggregation(Identifier,AssignOp,Aggregator,Group_Vars(Identifier),Formula(Atom(Identifier,Param_List(Expr(Identifier),Expr(Identifier))))))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Identifier))),AssignOp,Formula(Aggregation(Identifier,AssignOp,Aggregator,Aggregation_Args(Identifier),Group_Vars(Identifier),Formula(Atom(Identifier,Param_List(Expr(Identifier),Expr(Identifier))))))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Identifier),Expr(Identifier))),AssignOp,Formula(Aggregation(Bool_Aggregator,Group_Vars(Identifier),Formula(Formula(Atom(Identifier,Param_List(Expr(Identifier),Expr(Identifier)))),WordOp,Formula(Atom(Identifier,Param_List(Expr(Identifier),Expr(Identifier)))))))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Identifier))),AssignOp,Formula(Aggregation(Identifier,AssignOp,Aggregator,Group_Vars(Identifier),Formula(Formula(Atom(Identifier,Param_List(Expr(Identifier)))),WordOp,Formula(Atom(Identifier,Param_List(Expr(Identifier),Expr(Identifier)))))))))),
+  Item(Relation_Decl(Rule_Decl(Keyword(rel),Atom(Identifier,Param_List(Expr(Identifier),Expr(Identifier))),AssignOp,Formula(Aggregation(Identifier,AssignOp,Aggregator,Aggregation_Args(Constant(Number)),Group_Vars(Identifier),Formula(Formula(Formula(Atom(Identifier,Param_List(Expr(Identifier),Expr(FFIdentifier,Param_List(Expr(Identifier))),Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Identifier),Expr(Identifier))))),LogicOp,Formula(Atom(Identifier,Param_List(Expr(Identifier))))))))))
+)
