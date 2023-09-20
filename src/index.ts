@@ -23,7 +23,7 @@ export const ScallopLanguage = LRLanguage.define({
         FAIdentifier: t.attributeName,
         "Keyword!": t.keyword,
         "Tag!": t.tagName,
-        "Var/Identifier Expr/Identifier Constant/Identifier Group_Vars/Identifier":
+        "Var/Identifier Expr/Identifier Constant/Identifier GroupVars/Identifier":
           t.variableName,
         ArithOp: t.arithmeticOperator,
         LogicOp: t.logicOperator,

@@ -18,14 +18,14 @@ semiSep<content> {
 
 Boolean { @specialize<Identifier, "true" | "false"> }
 
-unary_op { ArithOp<"-"> | LogicOp<"!"> }
+unaryOp { ArithOp<"-"> | LogicOp<"!"> }
 
-bin_op {
+binOp {
   ArithOp<"+" | "-" | "*" | "/"| "%" | "^"> |
   LogicOp<"&&" | "||"> | WordOp<"and" | "or" | "implies"> | CompareOp
 }
 
-formula_op {
+formulaOp {
   LogicOp<"," | "/\\" | "\\/" | "=>"> |
   WordOp<"and" | "or" | "implies">
 }
@@ -35,10 +35,11 @@ WordOp<term> { @specialize<Identifier, term> }
 Keyword<term> { @specialize[@name={term}]<Identifier, term> }
 
 Item {
-  Type_Decl |
-  Relation_Decl |
-  Const_Decl |
-  Query_Decl
+  TypeDecl |
+  RelationDecl |
+  ConstDecl |
+  QueryDecl |
+  FADecl
 }
 
 Type { @specialize<Identifier, 
@@ -51,17 +52,17 @@ Adornment { @specialize<Identifier, "bound" | "free" >}
 
 Var { Identifier (":" Type)? }
 
-Param_List<expr> { "(" commaSep<expr> ~ambigParams ")" }
+ParamList<expr> { "(" commaSep<expr> ~ambigParams ")" }
 
-Type_Decl {
+TypeDecl {
   Keyword<"type"> Identifier AssignOp<"<:"> Type |
-  Keyword<"type"> commaSep1<Identifier Param_List<Type>> |
-  Keyword<"type"> commaSep1<Identifier Param_List<Var | Adornment Var>> |
-  Keyword<"type"> FFIdentifier Param_List<Var> ("->" Type)?
+  Keyword<"type"> commaSep1<Identifier ParamList<Type>> |
+  Keyword<"type"> commaSep1<Identifier ParamList<Var | Adornment Var>> |
+  Keyword<"type"> FFIdentifier ParamList<Var> ("->" Type)?
 }
 
-Relation_Decl {
-  Fact_Decl | Facts_Set_Decl | Rule_Decl
+RelationDecl {
+  FactDecl | FactSetDecl | RuleDecl
 }
 
 Tag {
@@ -72,24 +73,24 @@ Tagged<expr> {
   Tag "::" expr
 }
 
-Fact_Decl {
-  Keyword<"rel"> Identifier Param_List<Const_Expr> |
-  Keyword<"rel"> Tagged<Identifier Param_List<Const_Expr>>
+FactDecl {
+  Keyword<"rel"> Identifier ParamList<ConstExpr> |
+  Keyword<"rel"> Tagged<Identifier ParamList<ConstExpr>>
 }
 
-Facts_Set_Decl {
-  Keyword<"rel"> Identifier AssignOp<":="> Facts_Set
+FactSetDecl {
+  Keyword<"rel"> Identifier AssignOp<":="> FactSet
 }
 
-Facts_Set {
+FactSet {
   "{" (
-    commaSep<Const_Tuple> ~ambigFacts |
-    commaSep<Tagged<Const_Tuple>> ~ambigFacts |
-    semiSep<Tagged<Const_Tuple>> ~ambigFacts
+    commaSep<ConstTuple> ~ambigFacts |
+    commaSep<Tagged<ConstTuple>> ~ambigFacts |
+    semiSep<Tagged<ConstTuple>> ~ambigFacts
   ) "}"
 }
 
-Const_Decl {
+ConstDecl {
   Keyword<"const"> Var AssignOp<":="> Constant
 }
 
@@ -97,35 +98,35 @@ Constant {
   Boolean | Number | String
 }
 
-Const_Tuple {
+ConstTuple {
   Constant | "(" commaSep<Constant> ")"
 }
 
-Const_Expr[@dynamicPrecedence=1] {
+ConstExpr[@dynamicPrecedence=1] {
   Constant ~constant |
-  Const_Expr !op bin_op Const_Expr | unary_op Const_Expr |
-  FFIdentifier Param_List<Const_Expr> |
-  Keyword<"if"> Const_Expr Keyword<"then"> Const_Expr Keyword<"else"> Const_Expr |
-  "(" Const_Expr ")"
+  ConstExpr !op binOp ConstExpr | unaryOp ConstExpr |
+  FFIdentifier ParamList<ConstExpr> |
+  Keyword<"if"> ConstExpr Keyword<"then"> ConstExpr Keyword<"else"> ConstExpr |
+  "(" ConstExpr ")"
 }
 
 Expr {
   Identifier |
   Constant ~constant |
-  Expr !op bin_op Expr | unary_op Expr |
-  FFIdentifier Param_List<Expr> |
+  Expr !op binOp Expr | unaryOp Expr |
+  FFIdentifier ParamList<Expr> |
   Keyword<"if"> Expr Keyword<"then"> Expr Keyword<"else"> Expr |
   Expr !op Keyword<"as"> Type |
   "(" Expr ~ambigExpr  ")"
 }
 
 Atom {
-  Identifier Param_List<Expr>
+  Identifier ParamList<Expr>
 }
 
 Formula {
   Atom | "~" Atom | WordOp<"not"> Atom |
-  Formula !op formula_op Formula |
+  Formula !op formulaOp Formula |
   Constraint | Aggregation |
   "(" Formula ")"
 }
@@ -134,7 +135,7 @@ Constraint {
   Expr ~ambigExpr
 }
 
-Rule_Decl {
+RuleDecl {
   Keyword<"rel"> Atom AssignOp<":-" | ":="> Formula |
   Keyword<"rel"> Tagged<Atom> AssignOp<":-" | ":=">  Formula
 }
@@ -144,22 +145,36 @@ Aggregator { @extend<Identifier,
   "sum" | "prod" | "min" | "max" |
   "exists" | "forall" | "unique"> }
 
-Bool_Aggregator { @extend<Identifier, "forall" | "unique"> }
+BoolAggregator { @extend<Identifier, "forall" | "unique"> }
 
-Group_Vars { commaSep1<Identifier> }
+GroupVars { commaSep1<Identifier> }
 
-Aggregation_Args {
+AggregationArgs {
   "[" commaSep1<Identifier> "]" | "<" commaSep1<Constant> ">"
 }
 
 Aggregation {
-  Identifier AssignOp<":="> Aggregator Aggregation_Args? "(" Group_Vars ":" Formula
-    (Keyword<"where"> Group_Vars ":" Formula)? ")" |
-  Bool_Aggregator "(" Group_Vars ":" Formula ")"
+  Identifier AssignOp<":="> Aggregator AggregationArgs? "(" GroupVars ":" Formula
+    (Keyword<"where"> GroupVars ":" Formula)? ")" |
+  BoolAggregator "(" GroupVars ":" Formula ")"
 }
 
-Query_Decl {
+QueryDecl {
   Keyword<"query"> Identifier | Keyword<"query"> Atom
+}
+
+FAParamVal {
+  Boolean | Number | String |
+  "[" commaSep<FAParamVal> "]" |
+  "(" commaSep<FAParamVal> ")"
+}
+
+FAParam {
+  (Identifier AssignOp<"=">)? FAParamVal
+}
+
+FADecl {
+  FAIdentifier ParamList<FAParam>
 }
 
 @tokens {
