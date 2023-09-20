@@ -1,6 +1,6 @@
 @top Program { Item* }
 
-@precedence { op @left }
+@precedence { op @left, exprVar, exprConst }
 
 @skip { space | LineComment }
 
@@ -14,6 +14,10 @@ commaSep1<content> {
 
 semiSep<content> {
   (content (";" content)* ";"?)?
+}
+
+barSep<content> {
+  content ("|" content)*
 }
 
 Boolean { @specialize<Identifier, "true" | "false"> }
@@ -45,13 +49,16 @@ Type { @specialize<Identifier,
   "u8" | "u16" | "u32" | "u64" | "u128" | "usize" |
   "i8" | "i16" | "i32" | "i64" | "i128" | "isize" |
   "f32" | "f64" | "char" | "bool" | "String" |
-  "DateTime" | "Duration" | "Tensor"> }
+  "DateTime" | "Duration" | "Tensor"> | CustomType }
+
+CustomType {
+  Identifier
+}
 
 Adornment { @specialize<Identifier, "bound" | "free" >}
 
 untypedVar[@name="Var"] { Identifier }
 typedVar[@name="Var"] { Identifier ":" Type }
-Var { Identifier (":" Type)? }
 
 ParamList<expr> { ~ambigTag "(" commaSep<expr> ~ambigParams ")" }
 
@@ -65,13 +72,25 @@ FAParam {
   (Identifier AssignOp<"=">)? FAParamVal
 }
 
+EnumTypeIdentifier {
+  Identifier ~customType
+}
 
+EnumConst {
+  Identifier (AssignOp<"="> Constant)?
+}
+
+ADTIdentifier {
+  Identifier ~customType
+}
 
 TypeDecl {
   (FAIdentifier ParamList<FAParam>?)? Keyword<"type"> (
-    Identifier AssignOp<"<:"> Type |
+    Identifier ~customType (AssignOp<"="> | AssignOp<"<:">) Type |
+    EnumTypeIdentifier AssignOp<"="> barSep<EnumConst> |
+    ADTIdentifier AssignOp<"="> barSep<CustomType ParamList<Type>> |
     commaSep1<Identifier ParamList<Adornment? (Type | typedVar)>> |
-    FFIdentifier ParamList<Adornment? (Type | Var)> ("->" Type)?
+    FFIdentifier ParamList<Adornment? (Type | typedVar | untypedVar)> ("->" Type)?
   )
 }
 
@@ -92,7 +111,7 @@ FactDecl {
 }
 
 FactSetDecl {
-  Keyword<"rel"> Identifier AssignOp<":="> FactSet
+  Keyword<"rel"> Identifier AssignOp<":=" | "="> FactSet
 }
 
 FactSet {
@@ -103,12 +122,18 @@ FactSet {
   ) "}"
 }
 
-ConstDecl {
-  Keyword<"const"> Var AssignOp<":="> Constant
+ConstIdentifier {
+  Identifier ~constName
 }
 
+constVar[@name="Var"] { ConstIdentifier (":" Type)? }
+
 Constant {
-  Boolean | Number | String
+  Boolean | Number | String | ConstIdentifier
+}
+
+ConstDecl {
+  Keyword<"const"> commaSep1<constVar AssignOp<":=" | "="> Constant>
 }
 
 ConstTuple {
@@ -124,8 +149,8 @@ ConstExpr[@dynamicPrecedence=1] {
 }
 
 Expr {
-  Identifier |
-  Constant ~constant |
+  !exprVar Identifier ~constName |
+  !exprConst Constant ~constant |
   Expr !op binaryOp Expr | unaryOp Expr |
   FFIdentifier ParamList<Expr> |
   Keyword<"if"> Expr Keyword<"then"> Expr Keyword<"else"> Expr |
@@ -149,7 +174,7 @@ Constraint {
 }
 
 RuleDecl {
-  Keyword<"rel"> (Atom | Tagged<Atom> ) AssignOp<":-" | ":="> Formula
+  Keyword<"rel"> (Atom | Tagged<Atom> ) AssignOp<":-" | ":=" | "="> Formula
 }
 
 Aggregator { @extend<Identifier,
@@ -164,7 +189,7 @@ AggregationArgs {
 }
 
 Aggregation {
-  untypedVar AssignOp<":="> Aggregator AggregationArgs? "(" commaSep1<untypedVar> ":" Formula
+  untypedVar AssignOp<":=" | "="> Aggregator AggregationArgs? "(" commaSep1<untypedVar> ":" Formula
     (Keyword<"where"> commaSep1<untypedVar> ":" Formula)? ")" |
   BoolAggregator "(" commaSep1<untypedVar> ":" Formula ")"
 }
@@ -186,7 +211,7 @@ QueryDecl {
 
   ArithOp<expr> { expr }
   LogicOp<expr> { expr }
-  AssignOp<expr> { expr | "=" }
+  AssignOp<expr> { expr }
   CompareOp { ("<" | ">") "="? | "==" | "!=" }
 
   space { @whitespace+ }

@@ -10,28 +10,43 @@ const num_c : i32 = 2
 const str_a = "hello"
 const str_b : String = "one\"\\two"
 
+const x = y
+
+const LEFT = 0, UP = 1, RIGHT = 2, DOWN = 3
+
+type Action = LEFT | UP | RIGHT | DOWN
+type Color = RED | GREEN = 10 | BLUE
+
 ==>
 
 Program(
-  Item(ConstDecl(Keyword(const),Var(Identifier),AssignOp,Constant(Boolean))),
-  Item(ConstDecl(Keyword(const),Var(Identifier,Type),AssignOp,Constant(Boolean))),
-  Item(ConstDecl(Keyword(const),Var(Identifier),AssignOp,Constant(Number))),
-  Item(ConstDecl(Keyword(const),Var(Identifier),AssignOp,Constant(Number))),
-  Item(ConstDecl(Keyword(const),Var(Identifier,Type),AssignOp,Constant(Number))),
-  Item(ConstDecl(Keyword(const),Var(Identifier),AssignOp,Constant(String))),
-  Item(ConstDecl(Keyword(const),Var(Identifier,Type),AssignOp,Constant(String)))
+  Item(ConstDecl(Keyword(const),Var(ConstIdentifier(Identifier)),AssignOp,Constant(Boolean))),
+  Item(ConstDecl(Keyword(const),Var(ConstIdentifier(Identifier),Type),AssignOp,Constant(Boolean))),
+  Item(ConstDecl(Keyword(const),Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number))),
+  Item(ConstDecl(Keyword(const),Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number))),
+  Item(ConstDecl(Keyword(const),Var(ConstIdentifier(Identifier),Type),AssignOp,Constant(Number))),
+  Item(ConstDecl(Keyword(const),Var(ConstIdentifier(Identifier)),AssignOp,Constant(String))),
+  Item(ConstDecl(Keyword(const),Var(ConstIdentifier(Identifier),Type),AssignOp,Constant(String))),
+  Item(ConstDecl(Keyword(const),Var(ConstIdentifier(Identifier)),AssignOp,Constant(ConstIdentifier(Identifier)))),
+  Item(ConstDecl(Keyword(const),Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number),Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number),Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number),Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number))),
+  Item(TypeDecl(Keyword(type),EnumTypeIdentifier(Identifier),AssignOp,EnumConst(Identifier),EnumConst(Identifier),EnumConst(Identifier),EnumConst(Identifier))),
+  Item(TypeDecl(Keyword(type),EnumTypeIdentifier(Identifier),AssignOp,EnumConst(Identifier),EnumConst(Identifier,AssignOp,Constant(Number)),EnumConst(Identifier)))
 )
 
 # Type Declarations
 
 type a = i32
 type b <: bool
+
 type parent(String, String)
 type parent(a: String, b: String)
+
 type mixAndMatch(bound String, b: String, String)
 type $mixAndMatch(a, bound b: bool, c: char) -> i128
+
 type $foo(String, Tensor, i32) -> u64
 type $py_eval_number(s: String) -> f32
+
 type face_name(bound face: Tensor, bound list: String, name: String)
 
 ==>
@@ -52,11 +67,13 @@ Program(
 
 rel empty = {}
 rel digit = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}
+
 rel object_color = {
   0.98::(0, "red"), 0.01::(0, "green"), 0.01::(0, "blue"),
   0.01::(1, "red"), 0.98::(1, "green"), 0.01::(1, "blue"),
   0.02::(2, "red"), 0.97::(2, "green"), 0.01::(2, "blue"),
 }
+
 rel bool_tag = { true::(3.5,); false::(4.5) }
 
 ==>
@@ -71,12 +88,17 @@ Program(
 # Rule Declarations
 
 rel grandparent(a, b) = parent(a, b), parent(b, c)
+
 rel exists(a) = exist1(a) \/ exist2(b)
 rel sum(a + b) = digit1(a) /\ digit2(b)
+
 rel 1.0::eq(a == b) :- bool1(a), bool2(b)
+
 rel andRel(a && b) :- bool1(a), bool2(b)
 rel negRel(!a, -b) :- bool1(a), num2(b)
+
 rel negStr((-a) as String) = num(a)
+
 rel derived_kinship(p1, p3, r3) = p1 != p3 and derived_kinship(p1, p2, r1) and derived_kinship(p2, p3, r2) and composition(r2, r1, r3)
 
 ==>
@@ -106,12 +128,18 @@ Program(
 
 rel num_animals(n) :- n = count(o: name(o, "animal"))
 rel num_edges(n) = n := count(a, b: edge(a, b))
+
 rel num_obj_per_color(col, num) = num := count(obj: obj_color(obj, col))
 rel num_obj_per_color(col, num) = num := count(obj: obj_color(obj, col) where col: colors(col))
+
 rel total_sales(s) = s := sum(sp: sales_1(p, sp))
+
 rel best_student(n) = _ := max[n](s: exam_grades(n, s))
+
 rel path(a, c) = exists(b: path(a, b) and edge(b, c))
+
 rel target(b) = b := forall(o: object(o) implies obj_shape(o, SPHERE))
+
 rel identity(id, name) = name := top<1>(name: face_name(img, $string_concat(list), name), face_image(id, img), names(list))
 
 ==>
@@ -187,4 +215,11 @@ Program(
   Item(TypeDecl(FAIdentifier,ParamList(FAParam(FAParamVal(FAParamVal(String))),FAParam(Identifier,AssignOp,FAParamVal(Boolean))),Keyword(type),Identifier,ParamList(Adornment,Var(Identifier,Type),Var(Identifier,Type),Var(Identifier,Type)))),
   Item(TypeDecl(FAIdentifier,ParamList(FAParam(FAParamVal(FAParamVal(String),FAParamVal(String))),FAParam(Identifier,AssignOp,FAParamVal(String))),Keyword(type),Identifier,ParamList(Adornment,Var(Identifier,Type),Var(Identifier,Type)))),
   Item(TypeDecl(FAIdentifier,ParamList(FAParam(Identifier,AssignOp,FAParamVal(FAParamVal(String),FAParamVal(String),FAParamVal(String))),FAParam(Identifier,AssignOp,FAParamVal(FAParamVal(String),FAParamVal(String))),FAParam(Identifier,AssignOp,FAParamVal(Boolean)),FAParam(Identifier,AssignOp,FAParamVal(Number)),FAParam(Identifier,AssignOp,FAParamVal(Number)),FAParam(Identifier,AssignOp,FAParamVal(Number)),FAParam(Identifier,AssignOp,FAParamVal(Boolean))),Keyword(type),Identifier,ParamList(Adornment,Var(Identifier,Type),Adornment,Var(Identifier,Type),Var(Identifier,Type),Var(Identifier,Type),Var(Identifier,Type)))),
-  Item(TypeDecl(FAIdentifier,ParamList(FAParam(Identifier,AssignOp,FAParamVal(String)),FAParam(Identifier,AssignOp,FAParamVal(FAParamVal(String),FAParamVal(String),FAParamVal(String))),FAParam(Identifier,AssignOp,FAParamVal(FAParamVal(FAParamVal(FAParamVal(String)),FAParamVal(FAParamVal(FAParamVal(FAParamVal(String),FAParamVal(String))),FAParamVal(FAParamVal(FAParamVal(String))),FAParamVal(FAParamVal(FAParamVal(String),FAParamVal(String),FAParamVal(String)),FAParamVal(FAParamVal(String),FAParamVal(String),FAParamVal(String))))))),FAParam(Identifier,AssignOp,FAParamVal(String)),FAParam(Identifier,AssignOp,FAParamVal(FAParamVal(Boolean),FAParamVal(Boolean),FAParamVal(Boolean))),FAParam(Identifier,AssignOp,FAParamVal(Boolean))),Keyword(type),Identifier,ParamList(Adornment,Var(Identifier,Type),Var(Identifier,Type),Var(Identifier,Type)),Identifier,ParamList(Adornment,Var(Identifier,Type),Var(Identifier,Type)),Identifier,ParamList(Adornment,Var(Identifier,Type),Var(Identifier,Type),Var(Identifier,Type),Var(Identifier,Type)))))
+  Item(TypeDecl(FAIdentifier,ParamList(FAParam(Identifier,AssignOp,FAParamVal(String)),FAParam(Identifier,AssignOp,FAParamVal(FAParamVal(String),FAParamVal(String),FAParamVal(String))),FAParam(Identifier,AssignOp,FAParamVal(FAParamVal(FAParamVal(FAParamVal(String)),FAParamVal(FAParamVal(FAParamVal(FAParamVal(String),FAParamVal(String))),FAParamVal(FAParamVal(FAParamVal(String))),FAParamVal(FAParamVal(FAParamVal(String),FAParamVal(String),FAParamVal(String)),FAParamVal(FAParamVal(String),FAParamVal(String),FAParamVal(String))))))),FAParam(Identifier,AssignOp,FAParamVal(String)),FAParam(Identifier,AssignOp,FAParamVal(FAParamVal(Boolean),FAParamVal(Boolean),FAParamVal(Boolean))),FAParam(Identifier,AssignOp,FAParamVal(Boolean))),Keyword(type),Identifier,ParamList(Adornment,Var(Identifier,Type),Var(Identifier,Type),Var(Identifier,Type)),Identifier,ParamList(Adornment,Var(Identifier,Type),Var(Identifier,Type)),Identifier,ParamList(Adornment,Var(Identifier,Type),Var(Identifier,Type),Var(Identifier,Type),Var(Identifier,Type))))
+)
+
+# Abstract Data Types
+
+==>
+
+Program()
