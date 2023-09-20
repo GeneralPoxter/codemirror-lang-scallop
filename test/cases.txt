@@ -11,11 +11,9 @@ const str_a = "hello"
 const str_b : String = "one\"\\two"
 
 const x = y
+const x : CustomType = S
 
 const LEFT = 0, UP = 1, RIGHT = 2, DOWN = 3
-
-type Action = LEFT | UP | RIGHT | DOWN
-type Color = RED | GREEN = 10 | BLUE
 
 ==>
 
@@ -28,9 +26,8 @@ Program(
   Item(ConstDecl(Keyword(const),Var(ConstIdentifier(Identifier)),AssignOp,Constant(String))),
   Item(ConstDecl(Keyword(const),Var(ConstIdentifier(Identifier),Type),AssignOp,Constant(String))),
   Item(ConstDecl(Keyword(const),Var(ConstIdentifier(Identifier)),AssignOp,Constant(ConstIdentifier(Identifier)))),
-  Item(ConstDecl(Keyword(const),Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number),Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number),Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number),Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number))),
-  Item(TypeDecl(Keyword(type),EnumTypeIdentifier(Identifier),AssignOp,EnumConst(Identifier),EnumConst(Identifier),EnumConst(Identifier),EnumConst(Identifier))),
-  Item(TypeDecl(Keyword(type),EnumTypeIdentifier(Identifier),AssignOp,EnumConst(Identifier),EnumConst(Identifier,AssignOp,Constant(Number)),EnumConst(Identifier)))
+  Item(ConstDecl(Keyword(const),Var(ConstIdentifier(Identifier),Type(CustomType(Identifier))),AssignOp,Constant(ConstIdentifier(Identifier)))),
+  Item(ConstDecl(Keyword(const),Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number),Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number),Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number),Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number)))
 )
 
 # Type Declarations
@@ -49,6 +46,9 @@ type $py_eval_number(s: String) -> f32
 
 type face_name(bound face: Tensor, bound list: String, name: String)
 
+type Action = LEFT | UP | RIGHT | DOWN
+type Color = RED | GREEN = 10 | BLUE
+
 ==>
 
 Program(
@@ -60,7 +60,9 @@ Program(
   Item(TypeDecl(Keyword(type),FFIdentifier,ParamList(Var(Identifier),Adornment,Var(Identifier,Type),Var(Identifier,Type)),Type)),
   Item(TypeDecl(Keyword(type),FFIdentifier,ParamList(Type,Type,Type),Type)),
   Item(TypeDecl(Keyword(type),FFIdentifier,ParamList(Var(Identifier,Type)),Type)),
-  Item(TypeDecl(Keyword(type),Identifier,ParamList(Adornment,Var(Identifier,Type),Adornment,Var(Identifier,Type),Var(Identifier,Type))))
+  Item(TypeDecl(Keyword(type),Identifier,ParamList(Adornment,Var(Identifier,Type),Adornment,Var(Identifier,Type),Var(Identifier,Type)))),
+  Item(TypeDecl(Keyword(type),EnumTypeIdentifier(Identifier),AssignOp,EnumConst(Identifier),EnumConst(Identifier),EnumConst(Identifier),EnumConst(Identifier))),
+  Item(TypeDecl(Keyword(type),EnumTypeIdentifier(Identifier),AssignOp,EnumConst(Identifier),EnumConst(Identifier,AssignOp,Constant(Number)),EnumConst(Identifier)))
 )
 
 # Fact Declarations
