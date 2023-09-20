@@ -1,6 +1,6 @@
 @top Program { Item* }
 
-@precedence { op @left }
+@precedence { op @left, formula @cut }
 
 @skip { space | LineComment }
 
@@ -20,9 +20,9 @@ Boolean { @specialize<Identifier, "true" | "false"> }
 
 unaryOp { ArithOp<"-"> | LogicOp<"!"> }
 
-binOp {
+binaryOp {
   ArithOp<"+" | "-" | "*" | "/"| "%" | "^"> |
-  LogicOp<"&&" | "||"> | WordOp<"and" | "or" | "implies"> | CompareOp
+  LogicOp<"&&" | "||"> | CompareOp
 }
 
 formulaOp {
@@ -38,8 +38,7 @@ Item {
   TypeDecl |
   RelationDecl |
   ConstDecl |
-  QueryDecl |
-  FADecl
+  QueryDecl
 }
 
 Type { @specialize<Identifier, 
@@ -50,15 +49,30 @@ Type { @specialize<Identifier,
 
 Adornment { @specialize<Identifier, "bound" | "free" >}
 
+untypedVar[@name="Var"] { Identifier }
+typedVar[@name="Var"] { Identifier ":" Type }
 Var { Identifier (":" Type)? }
 
-ParamList<expr> { "(" commaSep<expr> ~ambigParams ")" }
+ParamList<expr> { ~ambigTag "(" commaSep<expr> ~ambigParams ")" }
+
+FAParamVal {
+  Boolean | Number | String |
+  "[" commaSep<FAParamVal> "]" |
+  "(" commaSep<FAParamVal> ")"
+}
+
+FAParam {
+  (Identifier AssignOp<"=">)? FAParamVal
+}
+
+
 
 TypeDecl {
-  Keyword<"type"> Identifier AssignOp<"<:"> Type |
-  Keyword<"type"> commaSep1<Identifier ParamList<Type>> |
-  Keyword<"type"> commaSep1<Identifier ParamList<Var | Adornment Var>> |
-  Keyword<"type"> FFIdentifier ParamList<Var> ("->" Type)?
+  (FAIdentifier ParamList<FAParam>?)? Keyword<"type"> (
+    Identifier AssignOp<"<:"> Type |
+    commaSep1<Identifier ParamList<Adornment? (Type | typedVar)>> |
+    FFIdentifier ParamList<Adornment? (Type | Var)> ("->" Type)?
+  )
 }
 
 RelationDecl {
@@ -70,12 +84,11 @@ Tag {
 }
 
 Tagged<expr> {
-  Tag "::" expr
+  Tag "::" expr ~ambigTag
 }
 
 FactDecl {
-  Keyword<"rel"> Identifier ParamList<ConstExpr> |
-  Keyword<"rel"> Tagged<Identifier ParamList<ConstExpr>>
+  Keyword<"rel"> (Identifier | Tagged<Identifier> ) ParamList<ConstExpr>
 }
 
 FactSetDecl {
@@ -104,7 +117,7 @@ ConstTuple {
 
 ConstExpr[@dynamicPrecedence=1] {
   Constant ~constant |
-  ConstExpr !op binOp ConstExpr | unaryOp ConstExpr |
+  ConstExpr !op binaryOp ConstExpr | unaryOp ConstExpr |
   FFIdentifier ParamList<ConstExpr> |
   Keyword<"if"> ConstExpr Keyword<"then"> ConstExpr Keyword<"else"> ConstExpr |
   "(" ConstExpr ")"
@@ -113,7 +126,7 @@ ConstExpr[@dynamicPrecedence=1] {
 Expr {
   Identifier |
   Constant ~constant |
-  Expr !op binOp Expr | unaryOp Expr |
+  Expr !op binaryOp Expr | unaryOp Expr |
   FFIdentifier ParamList<Expr> |
   Keyword<"if"> Expr Keyword<"then"> Expr Keyword<"else"> Expr |
   Expr !op Keyword<"as"> Type |
@@ -125,7 +138,7 @@ Atom {
 }
 
 Formula {
-  Atom | "~" Atom | WordOp<"not"> Atom |
+  Atom | LogicOp<"~"> Atom | WordOp<"not"> Atom |
   Formula !op formulaOp Formula |
   Constraint | Aggregation |
   "(" Formula ")"
@@ -136,8 +149,7 @@ Constraint {
 }
 
 RuleDecl {
-  Keyword<"rel"> Atom AssignOp<":-" | ":="> Formula |
-  Keyword<"rel"> Tagged<Atom> AssignOp<":-" | ":=">  Formula
+  Keyword<"rel"> (Atom | Tagged<Atom> ) AssignOp<":-" | ":="> Formula
 }
 
 Aggregator { @extend<Identifier,
@@ -147,34 +159,18 @@ Aggregator { @extend<Identifier,
 
 BoolAggregator { @extend<Identifier, "forall" | "unique"> }
 
-GroupVars { commaSep1<Identifier> }
-
 AggregationArgs {
-  "[" commaSep1<Identifier> "]" | "<" commaSep1<Constant> ">"
+  "[" commaSep1<untypedVar> "]" | "<" commaSep1<Constant> ">"
 }
 
 Aggregation {
-  Identifier AssignOp<":="> Aggregator AggregationArgs? "(" GroupVars ":" Formula
-    (Keyword<"where"> GroupVars ":" Formula)? ")" |
-  BoolAggregator "(" GroupVars ":" Formula ")"
+  untypedVar AssignOp<":="> Aggregator AggregationArgs? "(" commaSep1<untypedVar> ":" Formula
+    (Keyword<"where"> commaSep1<untypedVar> ":" Formula)? ")" |
+  BoolAggregator "(" commaSep1<untypedVar> ":" Formula ")"
 }
 
 QueryDecl {
   Keyword<"query"> Identifier | Keyword<"query"> Atom
-}
-
-FAParamVal {
-  Boolean | Number | String |
-  "[" commaSep<FAParamVal> "]" |
-  "(" commaSep<FAParamVal> ")"
-}
-
-FAParam {
-  (Identifier AssignOp<"=">)? FAParamVal
-}
-
-FADecl {
-  FAIdentifier ParamList<FAParam>
 }
 
 @tokens {
