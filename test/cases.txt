@@ -18,16 +18,16 @@ const LEFT = 0, UP = 1, RIGHT = 2, DOWN = 3
 ==>
 
 Program(
-  Item(ConstDecl(Keyword(const),Var(ConstIdentifier(Identifier)),AssignOp,Constant(Boolean))),
-  Item(ConstDecl(Keyword(const),Var(ConstIdentifier(Identifier),Type),AssignOp,Constant(Boolean))),
-  Item(ConstDecl(Keyword(const),Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number))),
-  Item(ConstDecl(Keyword(const),Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number))),
-  Item(ConstDecl(Keyword(const),Var(ConstIdentifier(Identifier),Type),AssignOp,Constant(Number))),
-  Item(ConstDecl(Keyword(const),Var(ConstIdentifier(Identifier)),AssignOp,Constant(String))),
-  Item(ConstDecl(Keyword(const),Var(ConstIdentifier(Identifier),Type),AssignOp,Constant(String))),
-  Item(ConstDecl(Keyword(const),Var(ConstIdentifier(Identifier)),AssignOp,Constant(ConstIdentifier(Identifier)))),
-  Item(ConstDecl(Keyword(const),Var(ConstIdentifier(Identifier),Type(CustomType(Identifier))),AssignOp,Constant(ConstIdentifier(Identifier)))),
-  Item(ConstDecl(Keyword(const),Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number),Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number),Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number),Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number)))
+  Item(ConstDecl(Keyword(const),ListItem(Var(ConstIdentifier(Identifier)),AssignOp,Constant(Boolean)))),
+  Item(ConstDecl(Keyword(const),ListItem(Var(ConstIdentifier(Identifier),Type),AssignOp,Constant(Boolean)))),
+  Item(ConstDecl(Keyword(const),ListItem(Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number)))),
+  Item(ConstDecl(Keyword(const),ListItem(Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number)))),
+  Item(ConstDecl(Keyword(const),ListItem(Var(ConstIdentifier(Identifier),Type),AssignOp,Constant(Number)))),
+  Item(ConstDecl(Keyword(const),ListItem(Var(ConstIdentifier(Identifier)),AssignOp,Constant(String)))),
+  Item(ConstDecl(Keyword(const),ListItem(Var(ConstIdentifier(Identifier),Type),AssignOp,Constant(String)))),
+  Item(ConstDecl(Keyword(const),ListItem(Var(ConstIdentifier(Identifier)),AssignOp,Constant(ConstIdentifier(Identifier))))),
+  Item(ConstDecl(Keyword(const),ListItem(Var(ConstIdentifier(Identifier),Type(CustomType(Identifier))),AssignOp,Constant(ConstIdentifier(Identifier))))),
+  Item(ConstDecl(Keyword(const),ListItem(Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number)),ListItem(Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number)),ListItem(Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number)),ListItem(Var(ConstIdentifier(Identifier)),AssignOp,Constant(Number))))
 )
 
 # Type Declarations
@@ -54,15 +54,15 @@ type Color = RED | GREEN = 10 | BLUE
 Program(
   Item(TypeDecl(Keyword(type),Identifier,AssignOp,Type)),
   Item(TypeDecl(Keyword(type),Identifier,AssignOp,Type)),
-  Item(TypeDecl(Keyword(type),Identifier,ParamList(Type,Type))),
-  Item(TypeDecl(Keyword(type),Identifier,ParamList(Var(Identifier,Type),Var(Identifier,Type)))),
-  Item(TypeDecl(Keyword(type),Identifier,ParamList(Adornment,Type,Var(Identifier,Type),Type))),
-  Item(TypeDecl(Keyword(type),FFIdentifier,ParamList(Var(Identifier),Adornment,Var(Identifier,Type),Var(Identifier,Type)),Type)),
-  Item(TypeDecl(Keyword(type),FFIdentifier,ParamList(Type,Type,Type),Type)),
-  Item(TypeDecl(Keyword(type),FFIdentifier,ParamList(Var(Identifier,Type)),Type)),
-  Item(TypeDecl(Keyword(type),Identifier,ParamList(Adornment,Var(Identifier,Type),Adornment,Var(Identifier,Type),Var(Identifier,Type)))),
-  Item(TypeDecl(Keyword(type),EnumTypeIdentifier(Identifier),AssignOp,EnumConst(Identifier),EnumConst(Identifier),EnumConst(Identifier),EnumConst(Identifier))),
-  Item(TypeDecl(Keyword(type),EnumTypeIdentifier(Identifier),AssignOp,EnumConst(Identifier),EnumConst(Identifier,AssignOp,Constant(Number)),EnumConst(Identifier)))
+  Item(TypeDecl(Keyword(type),ListItem(Identifier,ParamList(ListItem(Type),ListItem(Type))))),
+  Item(TypeDecl(Keyword(type),ListItem(Identifier,ParamList(ListItem(Var(Identifier,Type)),ListItem(Var(Identifier,Type)))))),
+  Item(TypeDecl(Keyword(type),ListItem(Identifier,ParamList(ListItem(Adornment,Type),ListItem(Var(Identifier,Type)),ListItem(Type))))),
+  Item(TypeDecl(Keyword(type),FFIdentifier,ParamList(ListItem(Var(Identifier)),ListItem(Adornment,Var(Identifier,Type)),ListItem(Var(Identifier,Type))),Type)),
+  Item(TypeDecl(Keyword(type),FFIdentifier,ParamList(ListItem(Type),ListItem(Type),ListItem(Type)),Type)),
+  Item(TypeDecl(Keyword(type),FFIdentifier,ParamList(ListItem(Var(Identifier,Type))),Type)),
+  Item(TypeDecl(Keyword(type),ListItem(Identifier,ParamList(ListItem(Adornment,Var(Identifier,Type)),ListItem(Adornment,Var(Identifier,Type)),ListItem(Var(Identifier,Type)))))),
+  Item(TypeDecl(Keyword(type),EnumTypeIdentifier(Identifier),AssignOp,ListItem(EnumConst(Identifier)),ListItem(EnumConst(Identifier)),ListItem(EnumConst(Identifier)),ListItem(EnumConst(Identifier)))),
+  Item(TypeDecl(Keyword(type),EnumTypeIdentifier(Identifier),AssignOp,ListItem(EnumConst(Identifier)),ListItem(EnumConst(Identifier,AssignOp,Constant(Number))),ListItem(EnumConst(Identifier))))
 )
 
 # Fact Declarations
@@ -82,9 +82,9 @@ rel bool_tag = { true::(3.5,); false::(4.5) }
 
 Program(
   Item(RelationDecl(FactSetDecl(Keyword(rel),Identifier,AssignOp,FactSet))),
-  Item(RelationDecl(FactSetDecl(Keyword(rel),Identifier,AssignOp,FactSet(ConstTuple(Constant(String)),ConstTuple(Constant(String)),ConstTuple(Constant(String)),ConstTuple(Constant(String)),ConstTuple(Constant(String)),ConstTuple(Constant(String)),ConstTuple(Constant(String)),ConstTuple(Constant(String)),ConstTuple(Constant(String)),ConstTuple(Constant(String)))))),
-  Item(RelationDecl(FactSetDecl(Keyword(rel),Identifier,AssignOp,FactSet(Tagged(Tag(Number),ConstTuple(Constant(Number),Constant(String))),Tagged(Tag(Number),ConstTuple(Constant(Number),Constant(String))),Tagged(Tag(Number),ConstTuple(Constant(Number),Constant(String))),Tagged(Tag(Number),ConstTuple(Constant(Number),Constant(String))),Tagged(Tag(Number),ConstTuple(Constant(Number),Constant(String))),Tagged(Tag(Number),ConstTuple(Constant(Number),Constant(String))),Tagged(Tag(Number),ConstTuple(Constant(Number),Constant(String))),Tagged(Tag(Number),ConstTuple(Constant(Number),Constant(String))),Tagged(Tag(Number),ConstTuple(Constant(Number),Constant(String))))))),
-  Item(RelationDecl(FactSetDecl(Keyword(rel),Identifier,AssignOp,FactSet(Tagged(Tag(Boolean),ConstTuple(Constant(Number))),Tagged(Tag(Boolean),ConstTuple(Constant(Number)))))))
+  Item(RelationDecl(FactSetDecl(Keyword(rel),Identifier,AssignOp,FactSet(ListItem(ConstTuple(Constant(String))),ListItem(ConstTuple(Constant(String))),ListItem(ConstTuple(Constant(String))),ListItem(ConstTuple(Constant(String))),ListItem(ConstTuple(Constant(String))),ListItem(ConstTuple(Constant(String))),ListItem(ConstTuple(Constant(String))),ListItem(ConstTuple(Constant(String))),ListItem(ConstTuple(Constant(String))),ListItem(ConstTuple(Constant(String))))))),
+  Item(RelationDecl(FactSetDecl(Keyword(rel),Identifier,AssignOp,FactSet(ListItem(Tagged(Tag(Number),ConstTuple(ListItem(Constant(Number)),ListItem(Constant(String))))),ListItem(Tagged(Tag(Number),ConstTuple(ListItem(Constant(Number)),ListItem(Constant(String))))),ListItem(Tagged(Tag(Number),ConstTuple(ListItem(Constant(Number)),ListItem(Constant(String))))),ListItem(Tagged(Tag(Number),ConstTuple(ListItem(Constant(Number)),ListItem(Constant(String))))),ListItem(Tagged(Tag(Number),ConstTuple(ListItem(Constant(Number)),ListItem(Constant(String))))),ListItem(Tagged(Tag(Number),ConstTuple(ListItem(Constant(Number)),ListItem(Constant(String))))),ListItem(Tagged(Tag(Number),ConstTuple(ListItem(Constant(Number)),ListItem(Constant(String))))),ListItem(Tagged(Tag(Number),ConstTuple(ListItem(Constant(Number)),ListItem(Constant(String))))),ListItem(Tagged(Tag(Number),ConstTuple(ListItem(Constant(Number)),ListItem(Constant(String))))))))),
+  Item(RelationDecl(FactSetDecl(Keyword(rel),Identifier,AssignOp,FactSet(ListItem(Tagged(Tag(Boolean),ConstTuple(ListItem(Constant(Number))))),ListItem(Tagged(Tag(Boolean),ConstTuple(ListItem(Constant(Number)))))))))
 )
 
 # Rule Declarations
@@ -101,19 +101,22 @@ rel negRel(!a, -b) :- bool1(a), num2(b)
 
 rel negStr((-a) as String) = num(a)
 
+rel constConstraint(x) = a and b or c implies d
+
 rel derived_kinship(p1, p3, r3) = p1 != p3 and derived_kinship(p1, p2, r1) and derived_kinship(p2, p3, r2) and composition(r2, r1, r3)
 
 ==>
 
 Program(
-  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(Expr(Identifier),Expr(Identifier))),AssignOp,Formula(Formula(Atom(Identifier,ParamList(Expr(Identifier),Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,ParamList(Expr(Identifier),Expr(Identifier)))))))),
-  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(Expr(Identifier))),AssignOp,Formula(Formula(Atom(Identifier,ParamList(Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,ParamList(Expr(Identifier)))))))),
-  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(Expr(Expr(Identifier),ArithOp,Expr(Identifier)))),AssignOp,Formula(Formula(Atom(Identifier,ParamList(Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,ParamList(Expr(Identifier)))))))),
-  Item(RelationDecl(RuleDecl(Keyword(rel),Tagged(Tag(Number),Atom(Identifier,ParamList(Expr(Expr(Identifier),CompareOp,Expr(Identifier))))),AssignOp,Formula(Formula(Atom(Identifier,ParamList(Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,ParamList(Expr(Identifier)))))))),
-  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(Expr(Expr(Identifier),LogicOp,Expr(Identifier)))),AssignOp,Formula(Formula(Atom(Identifier,ParamList(Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,ParamList(Expr(Identifier)))))))),
-  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(Expr(LogicOp,Expr(Identifier)),Expr(ArithOp,Expr(Identifier)))),AssignOp,Formula(Formula(Atom(Identifier,ParamList(Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,ParamList(Expr(Identifier)))))))),
-  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(Expr(Expr(Expr(ArithOp,Expr(Identifier))),Keyword(as),Type))),AssignOp,Formula(Atom(Identifier,ParamList(Expr(Identifier))))))),
-  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(Expr(Identifier),Expr(Identifier),Expr(Identifier))),AssignOp,Formula(Formula(Formula(Formula(Constraint(Expr(Expr(Identifier),CompareOp,Expr(Identifier)))),WordOp,Formula(Atom(Identifier,ParamList(Expr(Identifier),Expr(Identifier),Expr(Identifier))))),WordOp,Formula(Atom(Identifier,ParamList(Expr(Identifier),Expr(Identifier),Expr(Identifier))))),WordOp,Formula(Atom(Identifier,ParamList(Expr(Identifier),Expr(Identifier),Expr(Identifier))))))))
+  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier)))),AssignOp,Formula(Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier))))),LogicOp,Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier))))))))),
+  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(Identifier)))),AssignOp,Formula(Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier))))),LogicOp,Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier))))))))),
+  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(Expr(Identifier),ArithOp,Expr(Identifier))))),AssignOp,Formula(Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier))))),LogicOp,Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier))))))))),
+  Item(RelationDecl(RuleDecl(Keyword(rel),Tagged(Tag(Number),Atom(Identifier,ParamList(ListItem(Expr(Expr(Identifier),CompareOp,Expr(Identifier)))))),AssignOp,Formula(Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier))))),LogicOp,Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier))))))))),
+  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(Expr(Identifier),LogicOp,Expr(Identifier))))),AssignOp,Formula(Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier))))),LogicOp,Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier))))))))),
+  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(LogicOp,Expr(Identifier))),ListItem(Expr(ArithOp,Expr(Identifier))))),AssignOp,Formula(Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier))))),LogicOp,Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier))))))))),
+  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(Expr(Expr(ArithOp,Expr(Identifier))),Keyword(as),Type)))),AssignOp,Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier)))))))),
+  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(Identifier)))),AssignOp,Formula(Formula(Formula(Formula(Constraint(Identifier)),WordOp,Formula(Constraint(Identifier))),WordOp,Formula(Constraint(Identifier))),WordOp,Formula(Constraint(Identifier)))))),
+  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier)),ListItem(Expr(Identifier)))),AssignOp,Formula(Formula(Formula(Formula(Constraint(Constraint(Identifier),CompareOp,Constraint(Identifier))),WordOp,Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier)),ListItem(Expr(Identifier)))))),WordOp,Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier)),ListItem(Expr(Identifier)))))),WordOp,Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier)),ListItem(Expr(Identifier)))))))))
 )
 
 # Query Declarations
@@ -147,15 +150,15 @@ rel identity(id, name) = name := top<1>(name: face_name(img, $string_concat(list
 ==>
 
 Program(
-  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(Expr(Identifier))),AssignOp,Formula(Aggregation(Var(Identifier),AssignOp,Aggregator,Var(Identifier),Formula(Atom(Identifier,ParamList(Expr(Identifier),Expr(Constant(String)))))))))),
-  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(Expr(Identifier))),AssignOp,Formula(Aggregation(Var(Identifier),AssignOp,Aggregator,Var(Identifier),Var(Identifier),Formula(Atom(Identifier,ParamList(Expr(Identifier),Expr(Identifier))))))))),
-  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(Expr(Identifier),Expr(Identifier))),AssignOp,Formula(Aggregation(Var(Identifier),AssignOp,Aggregator,Var(Identifier),Formula(Atom(Identifier,ParamList(Expr(Identifier),Expr(Identifier))))))))),
-  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(Expr(Identifier),Expr(Identifier))),AssignOp,Formula(Aggregation(Var(Identifier),AssignOp,Aggregator,Var(Identifier),Formula(Atom(Identifier,ParamList(Expr(Identifier),Expr(Identifier)))),Keyword(where),Var(Identifier),Formula(Atom(Identifier,ParamList(Expr(Identifier))))))))),
-  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(Expr(Identifier))),AssignOp,Formula(Aggregation(Var(Identifier),AssignOp,Aggregator,Var(Identifier),Formula(Atom(Identifier,ParamList(Expr(Identifier),Expr(Identifier))))))))),
-  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(Expr(Identifier))),AssignOp,Formula(Aggregation(Var(Identifier),AssignOp,Aggregator,AggregationArgs(Var(Identifier)),Var(Identifier),Formula(Atom(Identifier,ParamList(Expr(Identifier),Expr(Identifier))))))))),
-  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(Expr(Identifier),Expr(Identifier))),AssignOp,Formula(Aggregation(BoolAggregator,Var(Identifier),Formula(Formula(Atom(Identifier,ParamList(Expr(Identifier),Expr(Identifier)))),WordOp,Formula(Atom(Identifier,ParamList(Expr(Identifier),Expr(Identifier)))))))))),
-  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(Expr(Identifier))),AssignOp,Formula(Aggregation(Var(Identifier),AssignOp,Aggregator,Var(Identifier),Formula(Formula(Atom(Identifier,ParamList(Expr(Identifier)))),WordOp,Formula(Atom(Identifier,ParamList(Expr(Identifier),Expr(Identifier)))))))))),
-  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(Expr(Identifier),Expr(Identifier))),AssignOp,Formula(Aggregation(Var(Identifier),AssignOp,Aggregator,AggregationArgs(Constant(Number)),Var(Identifier),Formula(Formula(Formula(Atom(Identifier,ParamList(Expr(Identifier),Expr(FFIdentifier,ParamList(Expr(Identifier))),Expr(Identifier)))),LogicOp,Formula(Atom(Identifier,ParamList(Expr(Identifier),Expr(Identifier))))),LogicOp,Formula(Atom(Identifier,ParamList(Expr(Identifier))))))))))
+  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(Identifier)))),AssignOp,Formula(Aggregation(Var(Identifier),AssignOp,Aggregator,ListItem(Var(Identifier)),Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Constant(String))))))))))),
+  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(Identifier)))),AssignOp,Formula(Aggregation(Var(Identifier),AssignOp,Aggregator,ListItem(Var(Identifier)),ListItem(Var(Identifier)),Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier)))))))))),
+  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier)))),AssignOp,Formula(Aggregation(Var(Identifier),AssignOp,Aggregator,ListItem(Var(Identifier)),Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier)))))))))),
+  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier)))),AssignOp,Formula(Aggregation(Var(Identifier),AssignOp,Aggregator,ListItem(Var(Identifier)),Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier))))),Keyword(where),ListItem(Var(Identifier)),Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier)))))))))),
+  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(Identifier)))),AssignOp,Formula(Aggregation(Var(Identifier),AssignOp,Aggregator,ListItem(Var(Identifier)),Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier)))))))))),
+  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(Identifier)))),AssignOp,Formula(Aggregation(Var(Identifier),AssignOp,Aggregator,AggregationArgs(ListItem(Var(Identifier))),ListItem(Var(Identifier)),Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier)))))))))),
+  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier)))),AssignOp,Formula(Aggregation(BoolAggregator,ListItem(Var(Identifier)),Formula(Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier))))),WordOp,Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier))))))))))),
+  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(Identifier)))),AssignOp,Formula(Aggregation(Var(Identifier),AssignOp,Aggregator,ListItem(Var(Identifier)),Formula(Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier))))),WordOp,Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier))))))))))),
+  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier)))),AssignOp,Formula(Aggregation(Var(Identifier),AssignOp,Aggregator,AggregationArgs(ListItem(Constant(Number))),ListItem(Var(Identifier)),Formula(Formula(Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(FFIdentifier,ParamList(ListItem(Expr(Identifier))))),ListItem(Expr(Identifier))))),LogicOp,Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier)))))),LogicOp,Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier)))))))))))
 )
 
 # FA Type Declarations
@@ -213,15 +216,32 @@ type extract_mentioned_date(bound question: String, label: String, date: DateTim
 ==>
 
 Program(
-  Item(TypeDecl(FAIdentifier,Keyword(type),FFIdentifier,ParamList(Type),Type)),
-  Item(TypeDecl(FAIdentifier,ParamList(FAParam(FAParamVal(FAParamVal(String))),FAParam(Identifier,AssignOp,FAParamVal(Boolean))),Keyword(type),Identifier,ParamList(Adornment,Var(Identifier,Type),Var(Identifier,Type),Var(Identifier,Type)))),
-  Item(TypeDecl(FAIdentifier,ParamList(FAParam(FAParamVal(FAParamVal(String),FAParamVal(String))),FAParam(Identifier,AssignOp,FAParamVal(String))),Keyword(type),Identifier,ParamList(Adornment,Var(Identifier,Type),Var(Identifier,Type)))),
-  Item(TypeDecl(FAIdentifier,ParamList(FAParam(Identifier,AssignOp,FAParamVal(FAParamVal(String),FAParamVal(String),FAParamVal(String))),FAParam(Identifier,AssignOp,FAParamVal(FAParamVal(String),FAParamVal(String))),FAParam(Identifier,AssignOp,FAParamVal(Boolean)),FAParam(Identifier,AssignOp,FAParamVal(Number)),FAParam(Identifier,AssignOp,FAParamVal(Number)),FAParam(Identifier,AssignOp,FAParamVal(Number)),FAParam(Identifier,AssignOp,FAParamVal(Boolean))),Keyword(type),Identifier,ParamList(Adornment,Var(Identifier,Type),Adornment,Var(Identifier,Type),Var(Identifier,Type),Var(Identifier,Type),Var(Identifier,Type)))),
-  Item(TypeDecl(FAIdentifier,ParamList(FAParam(Identifier,AssignOp,FAParamVal(String)),FAParam(Identifier,AssignOp,FAParamVal(FAParamVal(String),FAParamVal(String),FAParamVal(String))),FAParam(Identifier,AssignOp,FAParamVal(FAParamVal(FAParamVal(FAParamVal(String)),FAParamVal(FAParamVal(FAParamVal(FAParamVal(String),FAParamVal(String))),FAParamVal(FAParamVal(FAParamVal(String))),FAParamVal(FAParamVal(FAParamVal(String),FAParamVal(String),FAParamVal(String)),FAParamVal(FAParamVal(String),FAParamVal(String),FAParamVal(String))))))),FAParam(Identifier,AssignOp,FAParamVal(String)),FAParam(Identifier,AssignOp,FAParamVal(FAParamVal(Boolean),FAParamVal(Boolean),FAParamVal(Boolean))),FAParam(Identifier,AssignOp,FAParamVal(Boolean))),Keyword(type),Identifier,ParamList(Adornment,Var(Identifier,Type),Var(Identifier,Type),Var(Identifier,Type)),Identifier,ParamList(Adornment,Var(Identifier,Type),Var(Identifier,Type)),Identifier,ParamList(Adornment,Var(Identifier,Type),Var(Identifier,Type),Var(Identifier,Type),Var(Identifier,Type))))
+  Item(TypeDecl(FAIdentifier,Keyword(type),FFIdentifier,ParamList(ListItem(Type)),Type)),
+  Item(TypeDecl(FAIdentifier,ParamList(ListItem(FAParam(FAParamVal(ListItem(FAParamVal(String))))),ListItem(FAParam(Identifier,AssignOp,FAParamVal(Boolean)))),Keyword(type),ListItem(Identifier,ParamList(ListItem(Adornment,Var(Identifier,Type)),ListItem(Var(Identifier,Type)),ListItem(Var(Identifier,Type)))))),
+  Item(TypeDecl(FAIdentifier,ParamList(ListItem(FAParam(FAParamVal(ListItem(FAParamVal(String)),ListItem(FAParamVal(String))))),ListItem(FAParam(Identifier,AssignOp,FAParamVal(String)))),Keyword(type),ListItem(Identifier,ParamList(ListItem(Adornment,Var(Identifier,Type)),ListItem(Var(Identifier,Type)))))),
+  Item(TypeDecl(FAIdentifier,ParamList(ListItem(FAParam(Identifier,AssignOp,FAParamVal(ListItem(FAParamVal(String)),ListItem(FAParamVal(String)),ListItem(FAParamVal(String))))),ListItem(FAParam(Identifier,AssignOp,FAParamVal(ListItem(FAParamVal(String)),ListItem(FAParamVal(String))))),ListItem(FAParam(Identifier,AssignOp,FAParamVal(Boolean))),ListItem(FAParam(Identifier,AssignOp,FAParamVal(Number))),ListItem(FAParam(Identifier,AssignOp,FAParamVal(Number))),ListItem(FAParam(Identifier,AssignOp,FAParamVal(Number))),ListItem(FAParam(Identifier,AssignOp,FAParamVal(Boolean)))),Keyword(type),ListItem(Identifier,ParamList(ListItem(Adornment,Var(Identifier,Type)),ListItem(Adornment,Var(Identifier,Type)),ListItem(Var(Identifier,Type)),ListItem(Var(Identifier,Type)),ListItem(Var(Identifier,Type)))))),
+  Item(TypeDecl(FAIdentifier,ParamList(ListItem(FAParam(Identifier,AssignOp,FAParamVal(String))),ListItem(FAParam(Identifier,AssignOp,FAParamVal(ListItem(FAParamVal(String)),ListItem(FAParamVal(String)),ListItem(FAParamVal(String))))),ListItem(FAParam(Identifier,AssignOp,FAParamVal(ListItem(FAParamVal(ListItem(FAParamVal(ListItem(FAParamVal(String)))),ListItem(FAParamVal(ListItem(FAParamVal(ListItem(FAParamVal(ListItem(FAParamVal(String)),ListItem(FAParamVal(String)))))),ListItem(FAParamVal(ListItem(FAParamVal(ListItem(FAParamVal(String)))))),ListItem(FAParamVal(ListItem(FAParamVal(ListItem(FAParamVal(String)),ListItem(FAParamVal(String)),ListItem(FAParamVal(String)))),ListItem(FAParamVal(ListItem(FAParamVal(String)),ListItem(FAParamVal(String)),ListItem(FAParamVal(String))))))))))))),ListItem(FAParam(Identifier,AssignOp,FAParamVal(String))),ListItem(FAParam(Identifier,AssignOp,FAParamVal(ListItem(FAParamVal(Boolean)),ListItem(FAParamVal(Boolean)),ListItem(FAParamVal(Boolean))))),ListItem(FAParam(Identifier,AssignOp,FAParamVal(Boolean)))),Keyword(type),ListItem(Identifier,ParamList(ListItem(Adornment,Var(Identifier,Type)),ListItem(Var(Identifier,Type)),ListItem(Var(Identifier,Type)))),ListItem(Identifier,ParamList(ListItem(Adornment,Var(Identifier,Type)),ListItem(Var(Identifier,Type)))),ListItem(Identifier,ParamList(ListItem(Adornment,Var(Identifier,Type)),ListItem(Var(Identifier,Type)),ListItem(Var(Identifier,Type)),ListItem(Var(Identifier,Type))))))
 )
 
 # Abstract Data Types
 
+type IntList = Nil() | Cons(i32, List)
+
+const MY_LIST = Cons(1, Cons(2, Cons(3, Nil())))
+const MY_EXPR = Sub(Add(Int(1), Int(3)), Int(5))
+
+rel matches_substr(r, i, i) = case r is Star(_) and input_string(s) and string_chars(s, i, _)
+rel matches_substr(r, b, e) = case r is Star(r1) and matches_substr(r, b, c) and matches_substr(r1, c, e)
+
+rel equivalent(e, new Add(new Add(a, b), c)) = case e is Add(a, Add(b, c))
+
 ==>
 
-Program()
+Program(
+  Item(TypeDecl(Keyword(type),ADTIdentifier(Identifier),AssignOp,ListItem(Constructor(Identifier),ParamList),ListItem(Constructor(Identifier),ParamList(ListItem(Type),ListItem(Type(CustomType(Identifier))))))),
+  Item(ConstDecl(Keyword(const),ListItem(Var(ConstIdentifier(Identifier)),AssignOp,ConstEntity(Constructor(Identifier),ParamList(ListItem(Constant(Number)),ListItem(ConstEntity(Constructor(Identifier),ParamList(ListItem(Constant(Number)),ListItem(ConstEntity(Constructor(Identifier),ParamList(ListItem(Constant(Number)),ListItem(ConstEntity(Constructor(Identifier),ParamList))))))))))))),
+  Item(ConstDecl(Keyword(const),ListItem(Var(ConstIdentifier(Identifier)),AssignOp,ConstEntity(Constructor(Identifier),ParamList(ListItem(ConstEntity(Constructor(Identifier),ParamList(ListItem(ConstEntity(Constructor(Identifier),ParamList(ListItem(Constant(Number))))),ListItem(ConstEntity(Constructor(Identifier),ParamList(ListItem(Constant(Number)))))))),ListItem(ConstEntity(Constructor(Identifier),ParamList(ListItem(Constant(Number)))))))))),
+  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier)),ListItem(Expr(Identifier)))),AssignOp,Formula(Formula(Formula(Keyword(case),Var(Identifier),Keyword(is),Entity(Constructor(Identifier),ParamList(ListItem(Identifier)))),WordOp,Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier)))))),WordOp,Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier)),ListItem(Expr(Identifier))))))))),
+  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier)),ListItem(Expr(Identifier)))),AssignOp,Formula(Formula(Formula(Keyword(case),Var(Identifier),Keyword(is),Entity(Constructor(Identifier),ParamList(ListItem(Identifier)))),WordOp,Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier)),ListItem(Expr(Identifier)))))),WordOp,Formula(Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier)),ListItem(Expr(Identifier))))))))),
+  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Keyword(new),Constructor(Identifier),ParamList(ListItem(Expr(Keyword(new),Constructor(Identifier),ParamList(ListItem(Expr(Identifier)),ListItem(Expr(Identifier))))),ListItem(Expr(Identifier))))))),AssignOp,Formula(Keyword(case),Var(Identifier),Keyword(is),Entity(Constructor(Identifier),ParamList(ListItem(Identifier),ListItem(Entity(Constructor(Identifier),ParamList(ListItem(Identifier),ListItem(Identifier))))))))))
+)
