@@ -1,6 +1,6 @@
 @top Program { Item* }
 
-@precedence { op @left, formula @cut }
+@precedence { op @left }
 
 @skip { space | LineComment }
 
