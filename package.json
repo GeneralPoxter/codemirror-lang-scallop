@@ -1,6 +1,6 @@
 {
   "name": "codemirror-lang-scallop",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Scallop language support for CodeMirror",
   "scripts": {
     "test": "mocha test/test.js",
