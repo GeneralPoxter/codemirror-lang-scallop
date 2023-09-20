@@ -17,13 +17,15 @@ export const ScallopLanguage = LRLanguage.define({
         String: t.string,
         Boolean: t.bool,
         Number: t.number,
-        Type: t.typeName,
         Identifier: t.name,
         FFIdentifier: t.annotation,
         FAIdentifier: t.annotation,
         "Keyword!": t.keyword,
         "Tag!": t.tagName,
-        "Var/Identifier Expr/Identifier Constant/Identifier": t.variableName,
+        Adornment: t.propertyName,
+        "Type CustomType/Identifier": t.typeName,
+        "EnumConst/Identifier Constructor/Identifier": t.typeOperator,
+        "Var/Identifier": t.variableName,
         ArithOp: t.arithmeticOperator,
         LogicOp: t.logicOperator,
         WordOp: t.logicOperator,
@@ -68,7 +70,8 @@ export function ScallopHighlighter(theme: String) {
       { tag: [t.typeName, t.number], color: chalky },
       { tag: t.operator, color: cyan },
       { tag: t.comment, color: stone },
-      { tag: [t.string, t.macroName], color: sage },
+      { tag: [t.string, t.typeOperator, t.macroName], color: sage },
+      { tag: t.propertyName, color: ivory },
     ])
   );
 }

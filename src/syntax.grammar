@@ -133,19 +133,15 @@ FactSet {
   ) "}"
 }
 
-ConstIdentifier {
-  Identifier ~constName
-}
-
 Constant {
-  Boolean | Number | String | ConstIdentifier
+  Boolean | Number | String | untypedVar
 }
 
 ConstEntity {
   Constructor ParamList<Constant | ConstEntity>
 }
 
-constVar[@name="Var"] { ConstIdentifier (":" Type)? }
+constVar[@name="Var"] { Identifier (":" Type)? }
 
 ConstDecl {
   Keyword<"const"> commaSep1<constVar AssignOp<":=" | "="> (Constant | ConstEntity)>
@@ -164,7 +160,7 @@ ConstExpr[@dynamicPrecedence=1] {
 }
 
 Constraint {
-  !constraintVar Identifier ~constName |
+  !constraintVar untypedVar |
   !constraintConst Constant ~constant |
   Constraint !op binaryOp Constraint | unaryOp Constraint |
   FFIdentifier ParamList<Expr> |
@@ -173,7 +169,7 @@ Constraint {
 }
 
 Expr {
-  !exprVar Identifier |
+  !exprVar untypedVar |
   !exprConst Constant ~constant |
   Expr !op binaryOp Expr | unaryOp Expr |
   !exprFF FFIdentifier ParamList<Expr> | Constraint |
@@ -195,7 +191,7 @@ Formula {
 }
 
 Entity {
-  Constructor ParamList<Constant | Identifier | Entity>
+  Constructor ParamList<Constant | untypedVar | Entity>
 }
 
 RuleDecl {
