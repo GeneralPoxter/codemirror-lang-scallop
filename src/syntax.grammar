@@ -199,20 +199,20 @@ RuleDecl {
 }
 
 Aggregator { @extend<Identifier,
-  "count" | "count!" | "top" | 
-  "sum" | "prod" | "min" | "max" |
+  "count" | "sum" | "prod" | "min" | "max" |
   "exists" | "forall" | "unique"> }
-
-BoolAggregator { @extend<Identifier, "forall" | "unique"> }
+hardAggregator[@name="Aggregator"] { @extend<Identifier, "count"> }
+boolAggregator[@name="Aggregator"] { @extend<Identifier, "forall" | "unique"> }
+topAggregator[@name="Aggregator"] { @extend<Identifier, "top"> "<" Number ">" }
 
 AggregationArgs {
-  "[" commaSep1<untypedVar> "]" | "<" commaSep1<Constant> ">"
+  "[" commaSep1<untypedVar> "]"
 }
 
 Aggregation {
-  untypedVar AssignOp<":=" | "="> Aggregator AggregationArgs? "(" commaSep1<untypedVar> ":" Formula
-    (Keyword<"where"> commaSep1<untypedVar> ":" Formula)? ")" |
-  BoolAggregator "(" commaSep1<untypedVar> ":" Formula ")"
+  untypedVar AssignOp<":=" | "="> ((Aggregator | hardAggregator "!") AggregationArgs? | topAggregator)
+  "(" commaSep1<untypedVar> ":" Formula (Keyword<"where"> commaSep1<untypedVar> ":" Formula)? ")" |
+  boolAggregator "(" commaSep1<untypedVar> ":" Formula ")"
 }
 
 QueryDecl {
