@@ -11,7 +11,7 @@ const str_a = "hello"
 const str_b : String = "one\"\\two"
 
 const x = y
-const x : CustomType = S
+const x : MyType = S
 
 const LEFT = 0, UP = 1, RIGHT = 2, DOWN = 3
 
@@ -52,8 +52,8 @@ type Color = RED | GREEN = 10 | BLUE
 ==>
 
 Program(
-  Item(TypeDecl(Keyword(type),Identifier,AssignOp,Type)),
-  Item(TypeDecl(Keyword(type),Identifier,AssignOp,Type)),
+  Item(TypeDecl(Keyword(type),CustomType(Identifier),AssignOp,Type)),
+  Item(TypeDecl(Keyword(type),CustomType(Identifier),AssignOp,Type)),
   Item(TypeDecl(Keyword(type),ListItem(Identifier,ParamList(ListItem(Type),ListItem(Type))))),
   Item(TypeDecl(Keyword(type),ListItem(Identifier,ParamList(ListItem(Var(Identifier,Type)),ListItem(Var(Identifier,Type)))))),
   Item(TypeDecl(Keyword(type),ListItem(Identifier,ParamList(ListItem(Adornment,Type),ListItem(Var(Identifier,Type)),ListItem(Type))))),

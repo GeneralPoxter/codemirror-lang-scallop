@@ -59,7 +59,7 @@ Type { @specialize<Identifier,
   "DateTime" | "Duration" | "Tensor"> | CustomType }
 
 CustomType {
-  Identifier
+  Identifier ~customType
 }
 
 Adornment { @specialize<Identifier, "bound" | "free" > }
@@ -97,7 +97,7 @@ Constructor {
 
 TypeDecl {
   (FAIdentifier ParamList<FAParam>?)? Keyword<"type"> (
-    Identifier ~customType (AssignOp<"="> | AssignOp<"<:">) Type |
+    CustomType (AssignOp<"="> | AssignOp<"<:">) Type |
     EnumTypeIdentifier AssignOp<"="> barSep<EnumConst> |
     ADTIdentifier AssignOp<"="> barSep<Constructor ParamList<Type>> |
     commaSep1<Identifier ParamList<Adornment? (Type | typedVar)>> |
