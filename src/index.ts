@@ -6,8 +6,8 @@ import {
   syntaxHighlighting,
   syntaxTree,
 } from "@codemirror/language";
-import { styleTags, tags as t } from "@lezer/highlight";
 import { linter, type Diagnostic } from "@codemirror/lint";
+import { styleTags, tags as t } from "@lezer/highlight";
 
 export const ScallopLanguage = LRLanguage.define({
   parser: parser.configure({
@@ -63,7 +63,7 @@ export function ScallopHighlighter(theme: String) {
 
   return syntaxHighlighting(
     HighlightStyle.define([
-      { tag: [t.keyword, t.annotation], color: violet },
+      { tag: [t.keyword, t.propertyName], color: violet },
       { tag: t.variableName, color: coral },
       { tag: t.name, color: malibu },
       { tag: [t.tagName, t.bool], color: whiskey },
@@ -71,7 +71,7 @@ export function ScallopHighlighter(theme: String) {
       { tag: t.operator, color: cyan },
       { tag: t.comment, color: stone },
       { tag: [t.string, t.typeOperator, t.macroName], color: sage },
-      { tag: t.propertyName, color: ivory },
+      { tag: t.annotation, color: ivory },
     ])
   );
 }

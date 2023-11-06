@@ -67,7 +67,7 @@ Adornment { @specialize<Identifier, "bound" | "free" > }
 untypedVar[@name="Var"] { Identifier }
 typedVar[@name="Var"] { Identifier ":" Type }
 
-ParamList<expr> { ~tag "(" commaSep<expr> ~params ")" }
+ParamList<expr> { ~tag ~relation "(" commaSep<expr> ~params ")" }
 
 FAParamVal {
   Boolean | Number | String |
@@ -105,6 +105,10 @@ TypeDecl {
   )
 }
 
+RelationIdentifier {
+  Identifier ~relation
+}
+
 RelationDecl {
   FactDecl | FactSetDecl | RuleDecl
 }
@@ -118,11 +122,11 @@ Tagged<expr> {
 }
 
 FactDecl {
-  Keyword<"rel"> (Identifier | Tagged<Identifier> ) ParamList<ConstExpr>
+  Keyword<"rel"> (RelationIdentifier | Tagged<RelationIdentifier> ) ParamList<ConstExpr>
 }
 
 FactSetDecl {
-  Keyword<"rel"> Identifier AssignOp<":=" | "="> FactSet
+  Keyword<"rel"> RelationIdentifier AssignOp<":=" | "="> FactSet
 }
 
 FactSet {
