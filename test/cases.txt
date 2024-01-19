@@ -94,6 +94,10 @@ Program(
 
 rel grandparent(a, b) = parent(a, b), parent(b, c)
 
+rel equalTo(a, b) = num(a), num(b), a == b
+rel greaterThan(a, b) = num(a), num(b), a > b
+rel gte(a, b) = num(a), num(b), a >= b
+
 rel exists(a) = exist1(a) \/ exist2(b)
 rel sum(a + b) = digit1(a) /\ digit2(b)
 
@@ -112,6 +116,9 @@ rel derived_kinship(p1, p3, r3) = p1 != p3 and derived_kinship(p1, p2, r1) and d
 
 Program(
   Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(Var(Identifier))),ListItem(Expr(Var(Identifier))))),AssignOp,Formula(Formula(Atom(Identifier,ParamList(ListItem(Expr(Var(Identifier))),ListItem(Expr(Var(Identifier)))))),LogicOp,Formula(Atom(Identifier,ParamList(ListItem(Expr(Var(Identifier))),ListItem(Expr(Var(Identifier)))))))))),
+  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(Var(Identifier))),ListItem(Expr(Var(Identifier))))),AssignOp,Formula(Formula(Formula(Atom(Identifier,ParamList(ListItem(Expr(Var(Identifier)))))),LogicOp,Formula(Atom(Identifier,ParamList(ListItem(Expr(Var(Identifier))))))),LogicOp,Formula(Constraint(Constraint(Var(Identifier)),CompareOp,Constraint(Var(Identifier)))))))),
+  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(Var(Identifier))),ListItem(Expr(Var(Identifier))))),AssignOp,Formula(Formula(Formula(Atom(Identifier,ParamList(ListItem(Expr(Var(Identifier)))))),LogicOp,Formula(Atom(Identifier,ParamList(ListItem(Expr(Var(Identifier))))))),LogicOp,Formula(Constraint(Constraint(Var(Identifier)),CompareOp,Constraint(Var(Identifier)))))))),
+  Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(Var(Identifier))),ListItem(Expr(Var(Identifier))))),AssignOp,Formula(Formula(Formula(Atom(Identifier,ParamList(ListItem(Expr(Var(Identifier)))))),LogicOp,Formula(Atom(Identifier,ParamList(ListItem(Expr(Var(Identifier))))))),LogicOp,Formula(Constraint(Constraint(Var(Identifier)),CompareOp,Constraint(Var(Identifier)))))))),
   Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(Var(Identifier))))),AssignOp,Formula(Formula(Atom(Identifier,ParamList(ListItem(Expr(Var(Identifier)))))),LogicOp,Formula(Atom(Identifier,ParamList(ListItem(Expr(Var(Identifier)))))))))),
   Item(RelationDecl(RuleDecl(Keyword(rel),Atom(Identifier,ParamList(ListItem(Expr(Expr(Var(Identifier)),ArithOp,Expr(Var(Identifier)))))),AssignOp,Formula(Formula(Atom(Identifier,ParamList(ListItem(Expr(Var(Identifier)))))),LogicOp,Formula(Atom(Identifier,ParamList(ListItem(Expr(Var(Identifier)))))))))),
   Item(RelationDecl(RuleDecl(Keyword(rel),Tagged(Tag(Number),Atom(Identifier,ParamList(ListItem(Expr(Expr(Var(Identifier)),CompareOp,Expr(Var(Identifier))))))),AssignOp,Formula(Formula(Atom(Identifier,ParamList(ListItem(Expr(Var(Identifier)))))),LogicOp,Formula(Atom(Identifier,ParamList(ListItem(Expr(Var(Identifier)))))))))),

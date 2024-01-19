@@ -4,6 +4,7 @@
   op @left,
   exprVar, exprConst,
   constraintVar, constraintConst,
+  typeTag, untypedVar,
   exprFF @cut
 }
 
@@ -41,6 +42,10 @@ formulaOp {
   WordOp<"and" | "or" | "implies">
 }
 
+CompareOp {
+  compareOp<"<"> | compareOp<">"> | compareOp<"<=" | ">=" | "==" | "!=">
+}
+
 WordOp<term> { @specialize<Identifier, term> }
 
 Keyword<term> { @specialize[@name={term}]<Identifier, term> }
@@ -64,7 +69,7 @@ CustomType {
 
 Adornment { @specialize<Identifier, "bound" | "free" > }
 
-untypedVar[@name="Var"] { Identifier }
+untypedVar[@name="Var"] { Identifier !untypedVar }
 typedVar[@name="Var"] { Identifier ":" Type }
 
 ParamList<expr> { ~tag ~relation "(" commaSep<expr> ~params ")" }
@@ -181,8 +186,12 @@ Expr {
   "(" Expr ~expr  ")"
 }
 
+typeTag {
+  !typeTag compareOp<"<"> Type compareOp<">">
+}
+
 Atom {
-  Identifier ("<" Type ">")? ParamList<Expr>
+  Identifier typeTag? ParamList<Expr>
 }
 
 Formula {
@@ -236,8 +245,7 @@ QueryDecl {
   ArithOp<expr> { expr }
   LogicOp<expr> { expr }
   AssignOp<expr> { expr }
-  CompareOp { ("<" | ">") "="? | "==" | "!=" }
-  @precedence { "<", ">", CompareOp }
+  compareOp<expr> { expr }
 
   space { @whitespace+ }
 
