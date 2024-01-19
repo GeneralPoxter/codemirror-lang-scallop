@@ -131,8 +131,7 @@ FactSetDecl {
 
 FactSet {
   "{" (
-    commaSep<ConstTuple> ~facts |
-    commaSep<Tagged<ConstTuple>> ~facts |
+    commaSep<ConstTuple | Tagged<ConstTuple>> ~facts |
     semiSep<Tagged<ConstTuple>> ~facts
   ) "}"
 }
@@ -183,7 +182,7 @@ Expr {
 }
 
 Atom {
-  Identifier ParamList<Expr>
+  Identifier ("<" Type ">")? ParamList<Expr>
 }
 
 Formula {
@@ -238,6 +237,7 @@ QueryDecl {
   LogicOp<expr> { expr }
   AssignOp<expr> { expr }
   CompareOp { ("<" | ">") "="? | "==" | "!=" }
+  @precedence { "<", ">", CompareOp }
 
   space { @whitespace+ }
 

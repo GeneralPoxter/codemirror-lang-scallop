@@ -63,15 +63,14 @@ export function ScallopHighlighter(theme: String) {
 
   return syntaxHighlighting(
     HighlightStyle.define([
-      { tag: [t.keyword, t.propertyName], color: violet },
+      { tag: [t.keyword, t.propertyName, t.operator], color: violet },
       { tag: t.variableName, color: coral },
       { tag: t.name, color: malibu },
       { tag: [t.tagName, t.bool], color: whiskey },
       { tag: [t.typeName, t.number], color: chalky },
-      { tag: t.operator, color: cyan },
+      { tag: t.annotation, color: cyan },
       { tag: t.comment, color: stone },
       { tag: [t.string, t.typeOperator, t.macroName], color: sage },
-      { tag: t.annotation, color: ivory },
     ])
   );
 }
