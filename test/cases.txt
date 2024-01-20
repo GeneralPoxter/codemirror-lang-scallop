@@ -95,7 +95,7 @@ Program(
 rel grandparent(a, b) = parent(a, b), parent(b, c)
 
 rel equalTo(a, b) = num(a), num(b), a == b
-rel greaterThan(a, b) = num(a), num(b), a > b
+rel lessThan(a, b) = num(a), num(b), a < b
 rel gte(a, b) = num(a), num(b), a >= b
 
 rel exists(a) = exist1(a) \/ exist2(b)

@@ -4,7 +4,6 @@
   op @left,
   exprVar, exprConst,
   constraintVar, constraintConst,
-  typeTag, untypedVar,
   exprFF @cut
 }
 
@@ -69,7 +68,7 @@ CustomType {
 
 Adornment { @specialize<Identifier, "bound" | "free" > }
 
-untypedVar[@name="Var"] { Identifier !untypedVar }
+untypedVar[@name="Var"] { Identifier ~untypedVar }
 typedVar[@name="Var"] { Identifier ":" Type }
 
 ParamList<expr> { ~tag ~relation "(" commaSep<expr> ~params ")" }
@@ -187,7 +186,7 @@ Expr {
 }
 
 typeTag {
-  !typeTag compareOp<"<"> Type compareOp<">">
+  ~untypedVar compareOp<"<"> Type compareOp<">">
 }
 
 Atom {
